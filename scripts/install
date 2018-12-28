@@ -84,14 +84,14 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $final_path
 
-/opt/miniconda3/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupyterhub-ldapauthenticator -y
+$final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupyterhub-ldapauthenticator -y
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 
-/opt/miniconda3/bin/jupyter labextension install @jupyterlab/hub-extension
-/opt/miniconda3/bin/jupyter lab build
+$final_path/bin/jupyter labextension install @jupyterlab/hub-extension
+$final_path/bin/jupyter lab build
 
 #TODO Add admin
 

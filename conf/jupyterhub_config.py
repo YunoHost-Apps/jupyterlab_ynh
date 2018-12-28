@@ -92,7 +92,7 @@ c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 ## The public facing URL of the whole JupyterHub application.
 #  
 #  This is the address on which the proxy will bind. Sets protocol, ip, base_url
-c.JupyterHub.bind_url = '0.0.0.0:__PORT__/__PATH__'
+c.JupyterHub.bind_url = 'http://0.0.0.0:__PORT____PATH__'
 
 ## Whether to shutdown the proxy when the Hub shuts down.
 #  
@@ -466,7 +466,7 @@ c.JupyterHub.bind_url = '0.0.0.0:__PORT__/__PATH__'
 #  Some spawners allow shell-style expansion here, allowing you to use
 #  environment variables. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
-c.Spawner.cmd = ['/opt/miniconda3/bin/jupyter-labhub']
+c.Spawner.cmd = ['__FINAL_PATH__/bin/jupyter-labhub']
 
 ## Maximum number of consecutive failures to allow before shutting down
 #  JupyterHub.

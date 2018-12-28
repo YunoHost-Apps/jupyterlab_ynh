@@ -29,6 +29,7 @@ config_jupyterlab() {
 	ynh_replace_string "__URL__" "https://$domain" $jupyterlab_conf_path
 	ynh_replace_string "__PATH__" "${path_url%/}" $jupyterlab_conf_path
 	ynh_replace_string "__PORT__" "$port" $jupyterlab_conf_path
+	ynh_replace_string "__FINAL_PATH__" "$final_path" $jupyterlab_conf_path
 
     ynh_store_file_checksum $jupyterlab_conf_path
 }
