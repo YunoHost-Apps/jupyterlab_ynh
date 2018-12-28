@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+# Load common variables and helpers
+source ./_common.sh
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+# See comments in install script
+app=$YNH_APP_INSTANCE_NAME
+domain=$(ynh_app_setting_get "$app" domain)
+port=$(ynh_app_setting_get "$app" port)
+
+#=================================================
+# STANDARD REMOVE
+#=================================================
+# REMOVE JUPYTERLAB
+#=================================================
+
+#=================================================
+# REMOVE CONF FILE
+#=================================================
+
+# Remove Config
+remove_config_jupyterlab
+
+#=================================================
+# REMOVE APP MAIN DIR
+#=================================================
+
+ynh_secure_remove "$final_path"
+ynh_secure_remove "$config_path"
+
+# Remove the log files
+ynh_secure_remove "/var/log/$app"
+
+#=================================================
+# CLOSE PORTS
+#=================================================
+
+if yunohost firewall list | grep -q "\- $port$"
+then
+	echo "Close port $port" >&2
+	yunohost firewall disallow TCP $port 2>&1
+fi
+
+#=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+
+ynh_remove_nginx_config
+
+#=================================================
+# REMOVE LOGROTATE CONFIGURATION
+#=================================================
+
+#ynh_remove_logrotate

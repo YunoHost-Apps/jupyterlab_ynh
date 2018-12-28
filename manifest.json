@@ -1,0 +1,65 @@
+{
+    "name": "JupyterLab",
+    "id": "jupyterlab",
+    "packaging_format": 1,
+    "version": "0.35.4~ynh1",
+    "description": {
+        "en": "JupyterLab for Yunohost.",
+        "fr": "JupyterLab pour YunoHost."
+    },
+    "url": "https://jupyterlab.readthedocs.io/en/stable/",
+    "license": "BSD",
+    "maintainer": {
+        "name": "kayou",
+        "email": "",
+        "url": "http://example.com"
+    },
+    "requirements": {
+        "yunohost": ">> 3.0.0"
+    },
+    "multi_instance": false,
+    "services": [
+        "nginx"
+    ],
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain name for gitlab",
+                    "fr": "Choisissez un nom de domaine pour gitlab"
+                },
+                "example": "example.com"
+            },
+            {
+                "name": "path",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a path for gitlab",
+                    "fr": "Choisissez un chemin pour gitlab"
+                },
+                "example": "/",
+                "default": "/"
+            },
+            {
+                "name": "admin",
+				"type": "user",
+                "ask": {
+                    "en": "Choose an admin user",
+                    "fr": "Choisissez l’administrateur"
+                },
+                "example": "johndoe"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "ask": {
+                    "en": "Is it a public application?",
+                    "fr": "Est-ce une application publique ?"
+                },
+                "default": true
+            }
+        ]
+    }
+}

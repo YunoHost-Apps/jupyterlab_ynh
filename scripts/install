@@ -1,0 +1,123 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source /usr/share/yunohost/helpers
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+# Load common variables and helpers
+source ./_common.sh
+
+#=================================================
+# RETRIEVE ARGUMENTS
+#=================================================
+
+# Retrieve arguments
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
+admin=$YNH_APP_ARG_ADMIN
+
+#=================================================
+# REGISTER DOMAIN
+#=================================================
+
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+# This function check also the availability of this one
+ynh_webpath_register $app $domain $path_url
+
+#=================================================
+# REGISTER DOMAIN
+#=================================================
+
+# Check user parameter
+ynh_user_exists "$admin" \
+  || ynh_die "The chosen admin user does not exist."
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+
+ynh_app_setting_set $app admin $admin
+ynh_app_setting_set $app path_url $path_url
+ynh_app_setting_set $app is_public $is_public
+
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# FIND AND OPEN PORTS
+#=================================================
+
+# Find free ports
+port=$(ynh_find_port 8080)
+
+yunohost firewall allow --no-upnp TCP $port 2>&1
+ynh_app_setting_set $app port $port
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# CONFIGURE JUPYTERLAB
+#=================================================
+
+# Configure jupyterlab with jupyterhub_config.py file
+config_jupyterhub
+
+#=================================================
+# DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
+#=================================================
+
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3
+
+/opt/miniconda3/bin/conda install -c conda-forge jupyterhub
+/opt/miniconda3/bin/conda install notebook
+/opt/miniconda3/bin/conda install jupyterlab
+/opt/miniconda3/bin/conda install -c conda-forge jupyterhub-ldapauthenticator 
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+
+jupyter labextension install @jupyterlab/hub-extension
+
+#TODO Add admin
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+# If app is public, add url to SSOWat conf as skipped_uris
+if [[ $is_public -eq 1 ]]; then
+  # unprotected_uris allows SSO credentials to be passed anyway.
+  ynh_app_setting_set "$app" unprotected_uris "/"
+fi
+
+#=================================================
+# GENERIC FINALISATION
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+service nginx reload
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+
+# Configure logrotate
+#ynh_use_logrotate "/var/log/$app"
