@@ -74,7 +74,7 @@ ynh_add_nginx_config
 #=================================================
 
 # Configure jupyterlab with jupyterhub_config.py file
-config_jupyterhub
+config_jupyterlab
 
 #=================================================
 # DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
@@ -82,18 +82,16 @@ config_jupyterhub
 
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b -p $final_path
 
-/opt/miniconda3/bin/conda install -c conda-forge jupyterhub
-/opt/miniconda3/bin/conda install notebook
-/opt/miniconda3/bin/conda install jupyterlab
-/opt/miniconda3/bin/conda install -c conda-forge jupyterhub-ldapauthenticator 
+/opt/miniconda3/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupyterhub-ldapauthenticator -y
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 
-jupyter labextension install @jupyterlab/hub-extension
+/opt/miniconda3/bin/jupyter labextension install @jupyterlab/hub-extension
+/opt/miniconda3/bin/jupyter lab build
 
 #TODO Add admin
 

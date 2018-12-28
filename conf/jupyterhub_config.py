@@ -466,7 +466,7 @@ c.JupyterHub.bind_url = '__URL__:__PORT__/__PATH__'
 #  Some spawners allow shell-style expansion here, allowing you to use
 #  environment variables. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
-c.Spawner.cmd = ['jupyter-labhub']
+c.Spawner.cmd = ['/opt/miniconda3/bin/jupyter-labhub']
 
 ## Maximum number of consecutive failures to allow before shutting down
 #  JupyterHub.
