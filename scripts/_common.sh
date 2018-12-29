@@ -7,6 +7,23 @@ config_path="/etc/$app"
 final_path="/opt/$app"
 
 #=================================================
+# DETECT THE SYSTEM ARCHITECTURE
+#=================================================
+# Detect the system architecture to download the right file
+# NOTE: `uname -m` is more accurate and universal than `arch`
+# See https://en.wikipedia.org/wiki/Uname
+if [ -n "$(uname -m | grep 64)" ]; then
+	miniconda_architecture="x86_64"
+elif [ -n "$(uname -m | grep 86)" ]; then
+	miniconda_architecture="x86"
+elif [ -n "$(uname -m | grep arm)" ]; then
+	miniconda_architecture="armv7l"
+else
+	ynh_die "Unable to detect your achitecture, please open a bug describing \
+        your hardware and the result of the command \"uname -m\"." 1
+fi
+
+#=================================================
 # CREATE FOLDERS
 #=================================================
 create_dir() {

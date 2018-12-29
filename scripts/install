@@ -83,7 +83,7 @@ config_jupyterlab
 
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$miniconda_architecture.sh
 
-bash Miniconda3-latest-Linux-x86_64.sh -b -p $final_path
+bash Miniconda3-latest-Linux-$miniconda_architecture.sh -b -p $final_path
 
 $final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupyterhub-ldapauthenticator -y
 
