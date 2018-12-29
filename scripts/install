@@ -29,6 +29,7 @@ admin=$YNH_APP_ARG_ADMIN
 #=================================================
 
 # Normalize the url path syntax
+test -n "$path_url" || path_url="/"
 path_url=$(ynh_normalize_url_path $path_url)
 
 # This function check also the availability of this one
@@ -80,7 +81,7 @@ config_jupyterlab
 # DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
 #=================================================
 
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$miniconda_architecture.sh
 
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $final_path
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Jupyterlab
+After=syslog.target network.target
+
+[Service]
+User=root
+Environment="PATH=/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:__FINAL_PATH__/bin"
+ExecStart=Jupyterhub -f __CONFIG_PATH__/jupyterhub_config.py
+
+[Install]
+WantedBy=multi-user.target
