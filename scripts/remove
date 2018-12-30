@@ -24,8 +24,22 @@ port=$(ynh_app_setting_get "$app" port)
 #=================================================
 # STANDARD REMOVE
 #=================================================
-# REMOVE JUPYTERLAB
+# STOP AND REMOVE SERVICE
 #=================================================
+
+# Remove the dedicated systemd config
+ynh_remove_systemd_config
+
+#=================================================
+# REMOVE SERVICE FROM ADMIN PANEL
+#=================================================
+
+# Remove a service from the admin panel, added by `yunohost service add`
+if yunohost service status | grep -q $app
+then
+	echo "Remove $app service"
+	yunohost service remove $app
+fi
 
 #=================================================
 # REMOVE CONF FILE
@@ -42,7 +56,7 @@ ynh_secure_remove "$final_path"
 ynh_secure_remove "$config_path"
 
 # Remove the log files
-ynh_secure_remove "/var/log/$app"
+ynh_secure_remove "/var/log/$app.log"
 
 #=================================================
 # CLOSE PORTS

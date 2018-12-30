@@ -31,7 +31,7 @@ create_dir() {
 }
 
 #=================================================
-# CONFIGURATION FILE FOR JUPYTERLAB
+# CONFIGURATION FILES FOR JUPYTERLAB
 #=================================================
 config_jupyterlab() {
     create_dir
@@ -40,15 +40,41 @@ config_jupyterlab() {
 
     ynh_backup_if_checksum_is_different $jupyterlab_conf_path
 
-	# Gitlab configuration
+	# JupyterLab configuration
 	cp -f ../conf/jupyterhub_config.py $jupyterlab_conf_path
 
 	ynh_replace_string "__URL__" "https://$domain" $jupyterlab_conf_path
 	ynh_replace_string "__PATH__" "${path_url%/}" $jupyterlab_conf_path
 	ynh_replace_string "__PORT__" "$port" $jupyterlab_conf_path
 	ynh_replace_string "__FINAL_PATH__" "$final_path" $jupyterlab_conf_path
+	ynh_replace_string "__ADMIN__" "$admin" $jupyterlab_conf_path
 
     ynh_store_file_checksum $jupyterlab_conf_path
+}
+
+config_jupyter_notebook() {
+	jupyter_notebook_conf_path="$final_path/etc/jupyter/jupyter_notebook_config.py"
+
+    ynh_backup_if_checksum_is_different $jupyter_notebook_conf_path
+
+	# Jupyter notebook configuration
+	cp -f ../conf/jupyter_notebook_config.py $jupyter_notebook_conf_path
+
+    ynh_store_file_checksum $jupyter_notebook_conf_path
+}
+
+#=================================================
+# CREATE A DEDICATED SYSTEMD CONFIG
+#=================================================
+add_systemd_config () {
+	sudo cp ../conf/systemd.service.default ../conf/systemd.service
+	tempsystemdconf="../conf/systemd.service"
+
+	if test -n "${config_path:-}"; then
+		ynh_replace_string "__CONFIGPATH__" "$config_path" "$tempsystemdconf"
+	fi
+
+	ynh_add_systemd_config
 }
 
 #=================================================

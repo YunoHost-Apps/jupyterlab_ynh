@@ -90,11 +90,23 @@ $final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupy
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+# ADD HUB EXTENSION
+#=================================================
 
 $final_path/bin/jupyter labextension install @jupyterlab/hub-extension
 $final_path/bin/jupyter lab build
 
-#TODO Add admin
+#=================================================
+# CONFIGURE JUPYTER NOTEBOOK
+#=================================================
+config_jupyter_notebook
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+add_systemd_config
 
 #=================================================
 # SETUP SSOWAT
@@ -113,6 +125,18 @@ fi
 #=================================================
 
 service nginx reload
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app --log "/var/log/$app.log"
+
+#=================================================
+# START SERVICE
+#=================================================
+
+yunohost service start jupyterlab
 
 #=================================================
 # SETUP LOGROTATE

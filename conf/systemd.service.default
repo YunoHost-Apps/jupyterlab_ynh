@@ -1,0 +1,13 @@
+[Unit]
+Description=Jupyterlab
+After=syslog.target network.target
+
+[Service]
+ExecStart=__FINALPATH__/bin/jupyterhub -f __CONFIGPATH__/jupyterhub_config.py 2&>> /var/log/__APP__.log
+Restart=always
+RestartSec=10
+WorkingDirectory=__FINALPATH__
+LimitNOFILE=49152
+
+[Install]
+WantedBy=multi-user.target
