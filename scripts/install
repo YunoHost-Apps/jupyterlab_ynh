@@ -96,6 +96,8 @@ $final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupy
 $final_path/bin/jupyter labextension install @jupyterlab/hub-extension
 $final_path/bin/jupyter lab build
 
+chown $admin -R $final_path/share/jupyter
+
 #=================================================
 # CONFIGURE JUPYTER NOTEBOOK
 #=================================================
