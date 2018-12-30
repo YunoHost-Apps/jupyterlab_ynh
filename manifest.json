@@ -8,7 +8,7 @@
         "fr": "JupyterLab pour YunoHost."
     },
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "maintainer": {
         "name": "kayou",
         "email": "",
@@ -17,7 +17,7 @@
     "requirements": {
         "yunohost": ">> 3.0.0"
     },
-    "multi_instance": false,
+    "multi_instance": true,
     "services": [
         "nginx"
     ],
