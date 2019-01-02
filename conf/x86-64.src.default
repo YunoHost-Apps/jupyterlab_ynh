@@ -1,0 +1,6 @@
+SOURCE_URL=https://repo.continuum.io/miniconda/Miniconda3-__VERSION__-Linux-x86_64.sh
+SOURCE_SUM=__MD5_SUM__
+SOURCE_SUM_PRG=md5sum
+SOURCE_FILENAME=Miniconda3-__VERSION__-Linux-x86_64.sh
+SOURCE_EXTRACT=false
+SOURCE_FORMAT=sh
