@@ -60,9 +60,12 @@ ynh_app_setting_set $app is_public $is_public
 
 # Find free ports
 port=$(ynh_find_port 8080)
+port_hub=$(ynh_find_port 8081)
 
 yunohost firewall allow --no-upnp TCP $port 2>&1
+yunohost firewall allow --no-upnp TCP $port_hub 2>&1
 ynh_app_setting_set $app port $port
+ynh_app_setting_set $app port_hub $port_hub
 
 #=================================================
 # NGINX CONFIGURATION
@@ -82,11 +85,7 @@ config_jupyterlab
 # DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
 #=================================================
 
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$miniconda_architecture.sh
-
-bash Miniconda3-latest-Linux-$miniconda_architecture.sh -b -p $final_path
-
-$final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupyterhub-ldapauthenticator -y
+setup_source $miniconda_architecture
 
 #=================================================
 # SPECIFIC SETUP
@@ -94,8 +93,8 @@ $final_path/bin/conda install -c conda-forge jupyterhub notebook jupyterlab jupy
 # ADD HUB EXTENSION
 #=================================================
 
-$final_path/bin/jupyter labextension install @jupyterlab/hub-extension
-$final_path/bin/jupyter lab build
+jupyter labextension install @jupyterlab/hub-extension
+jupyter lab build
 
 chown $admin -R $final_path/share/jupyter
 
