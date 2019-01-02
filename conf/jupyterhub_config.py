@@ -92,7 +92,7 @@ c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 ## The public facing URL of the whole JupyterHub application.
 #  
 #  This is the address on which the proxy will bind. Sets protocol, ip, base_url
-c.JupyterHub.bind_url = 'http://0.0.0.0:__PORT____PATH__'
+c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 
 ## Whether to shutdown the proxy when the Hub shuts down.
 #  
@@ -203,7 +203,7 @@ c.JupyterHub.bind_url = 'http://0.0.0.0:__PORT____PATH__'
 #      "unix+http://%2Fsrv%2Fjupyterhub%2Fjupyterhub.sock"
 #  
 #  .. versionadded:: 0.9
-#c.JupyterHub.hub_bind_url = ''
+c.JupyterHub.hub_bind_url = 'http://127.0.0.1:__PORT_HUB__'
 
 ## The ip or hostname for proxies and spawners to use for connecting to the Hub.
 #  
