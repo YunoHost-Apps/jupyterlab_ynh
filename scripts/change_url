@@ -31,7 +31,9 @@ app=$YNH_APP_INSTANCE_NAME
 # LOAD SETTINGS
 #=================================================
 
+admin=$(ynh_app_setting_get "$app" admin)
 port=$(ynh_app_setting_get "$app" port)
+port_hub=$(ynh_app_setting_get "$app" port_hub)
 
 #=================================================
 # CHECK PATHS SYNTAX
