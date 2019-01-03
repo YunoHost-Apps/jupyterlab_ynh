@@ -61,6 +61,8 @@ config_jupyter_notebook() {
 	# Jupyter notebook configuration
 	cp -f ../conf/jupyter_notebook_config.py $jupyter_notebook_conf_path
 
+	ynh_replace_string "__ENABLE_TERMINAL__" "$enable_terminal" $jupyter_notebook_conf_path
+
 	ynh_store_file_checksum $jupyter_notebook_conf_path
 }
 
