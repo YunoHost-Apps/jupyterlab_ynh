@@ -320,7 +320,7 @@ c.NotebookApp.disable_check_xsrf = True
 #c.NotebookApp.ssl_options = {}
 
 ## Supply overrides for terminado. Currently only supports "shell_command".
-#c.NotebookApp.terminado_settings = {}
+c.NotebookApp.terminado_settings = {'shell_command': ['/bin/bash']}
 
 ## Set to False to disable terminals.
 #  
