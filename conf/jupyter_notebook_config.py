@@ -329,7 +329,7 @@ c.NotebookApp.terminado_settings = {'shell_command': ['/bin/bash']}
 #  
 #  Terminals may also be automatically disabled if the terminado package is not
 #  available.
-#c.NotebookApp.terminals_enabled = True
+c.NotebookApp.terminals_enabled = bool(__ENABLE_TERMINAL__)
 
 ## Token used for authenticating first-time connections to the server.
 #  

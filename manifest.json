@@ -59,6 +59,15 @@
                     "fr": "Est-ce une application publique ?"
                 },
                 "default": true
+            },
+            {
+                "name": "enable_terminal",
+                "type": "boolean",
+                "ask": {
+                    "en": "Enable terminal in the lab?",
+                    "fr": "Activer le terminal dans le lab ?"
+                },
+                "default": true
             }
         ]
     }
