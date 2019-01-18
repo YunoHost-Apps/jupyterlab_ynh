@@ -7,6 +7,7 @@
 #=================================================
 
 source /usr/share/yunohost/helpers
+source ./experimental_helper.sh
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -128,7 +129,7 @@ fi
 # RELOAD NGINX
 #=================================================
 
-service nginx reload
+systemctl reload nginx
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
@@ -140,11 +141,4 @@ yunohost service add $app --log "/var/log/$app.log"
 # START SERVICE
 #=================================================
 
-yunohost service start jupyterlab
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-
-# Configure logrotate
-#ynh_use_logrotate "/var/log/$app"
+ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p /var/log/$app.log

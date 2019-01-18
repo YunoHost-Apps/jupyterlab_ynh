@@ -103,10 +103,10 @@ config_jupyterlab
 # RELOAD NGINX
 #=================================================
 
-service nginx reload
+systemctl reload nginx
 
 #=================================================
 # START SERVICE
 #=================================================
 
-yunohost service start jupyterlab
+ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p /var/log/$app.log
