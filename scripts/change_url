@@ -34,6 +34,7 @@ app=$YNH_APP_INSTANCE_NAME
 admin=$(ynh_app_setting_get "$app" admin)
 port=$(ynh_app_setting_get "$app" port)
 port_hub=$(ynh_app_setting_get "$app" port_hub)
+port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
 
 #=================================================
 # CHECK PATHS SYNTAX
@@ -109,4 +110,6 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p /var/log/$app.log
+systemctl start $app
+
+ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"

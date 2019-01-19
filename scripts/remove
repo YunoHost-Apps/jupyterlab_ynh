@@ -21,6 +21,7 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get "$app" domain)
 port=$(ynh_app_setting_get "$app" port)
 port_hub=$(ynh_app_setting_get "$app" port_hub)
+port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
 
 #=================================================
 # STANDARD REMOVE
@@ -72,6 +73,11 @@ if yunohost firewall list | grep -q "\- $port_hub$"
 then
 	echo "Close port $port_hub" >&2
 	yunohost firewall disallow TCP $port_hub 2>&1
+fi
+if yunohost firewall list | grep -q "\- $port_http_proxy$"
+then
+	echo "Close port $port_http_proxy" >&2
+	yunohost firewall disallow TCP $port_http_proxy 2>&1
 fi
 
 #=================================================

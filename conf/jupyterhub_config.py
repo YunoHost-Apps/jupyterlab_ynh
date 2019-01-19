@@ -205,6 +205,8 @@ c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 #  .. versionadded:: 0.9
 c.JupyterHub.hub_bind_url = 'http://127.0.0.1:__PORT_HUB__'
 
+c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
+
 ## The ip or hostname for proxies and spawners to use for connecting to the Hub.
 #  
 #  Use when the bind address (`hub_ip`) is 0.0.0.0 or otherwise different from

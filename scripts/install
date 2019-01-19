@@ -63,12 +63,15 @@ ynh_app_setting_set $app enable_terminal $is_public
 
 # Find free ports
 port=$(ynh_find_port 8080)
-port_hub=$(ynh_find_port 8081)
+port_hub=$(ynh_find_port $(($port + 1)))
+port_http_proxy=$(ynh_find_port $(($port_hub + 1)))
 
 yunohost firewall allow --no-upnp TCP $port 2>&1
 yunohost firewall allow --no-upnp TCP $port_hub 2>&1
+yunohost firewall allow --no-upnp TCP $port_http_proxy 2>&1
 ynh_app_setting_set $app port $port
 ynh_app_setting_set $app port_hub $port_hub
+ynh_app_setting_set $app port_http_proxy $port_http_proxy
 
 #=================================================
 # NGINX CONFIGURATION
@@ -141,4 +144,4 @@ yunohost service add $app --log "/var/log/$app.log"
 # START SERVICE
 #=================================================
 
-ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p /var/log/$app.log
+ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"

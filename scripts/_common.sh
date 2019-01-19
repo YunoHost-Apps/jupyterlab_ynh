@@ -47,6 +47,7 @@ config_jupyterlab() {
 	ynh_replace_string "__PATH__" "${path_url%/}" $jupyterlab_conf_path
 	ynh_replace_string "__PORT__" "$port" $jupyterlab_conf_path
 	ynh_replace_string "__PORT_HUB__" "$port_hub" $jupyterlab_conf_path
+	ynh_replace_string "__PORT_HTTP_PROXY__" "$port_http_proxy" $jupyterlab_conf_path
 	ynh_replace_string "__FINAL_PATH__" "$final_path" $jupyterlab_conf_path
 	ynh_replace_string "__ADMIN__" "$admin" $jupyterlab_conf_path
 
