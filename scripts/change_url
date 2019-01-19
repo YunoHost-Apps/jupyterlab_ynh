@@ -111,4 +111,4 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"
+ynh_systemd_action -n $app -a restart -l "JupyterHub is now running at" -p "systemd"
