@@ -138,7 +138,7 @@ systemctl reload nginx
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --log "/var/log/$app.log"
+yunohost service add $app --log "systemd"
 
 #=================================================
 # START SERVICE
