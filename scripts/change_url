@@ -8,6 +8,7 @@
 
 # IMPORT GENERIC HELPERS
 source /usr/share/yunohost/helpers
+source ./experimental_helper.sh
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -109,7 +110,5 @@ systemctl reload nginx
 #=================================================
 # START SERVICE
 #=================================================
-
-systemctl start $app
 
 ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"
