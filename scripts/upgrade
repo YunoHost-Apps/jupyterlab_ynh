@@ -1,0 +1,126 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# IMPORT GENERIC HELPERS
+source /usr/share/yunohost/helpers
+source ./experimental_helper.sh
+
+# Load common variables and helpers
+source ./_common.sh
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+app=$YNH_APP_INSTANCE_NAME
+
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
+path_url=$(ynh_app_setting_get "$app" path_url)
+admin=$(ynh_app_setting_get "$app" admin)
+is_public=$(ynh_app_setting_get "$app" is_public)
+port=$(ynh_app_setting_get "$app" port)
+port_hub=$(ynh_app_setting_get "$app" port_hub)
+port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+
+# TODO Add backup/restore scripts
+## Backup the current version of the app
+#ynh_backup_before_upgrade
+#ynh_clean_setup () {
+#	# restore it if the upgrade fails
+#	ynh_restore_upgradebackup
+#}
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# CHECK THE PATH
+#=================================================
+
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+ynh_add_nginx_config
+
+#=================================================
+# CONFIGURE JUPYTERLAB
+#=================================================
+
+# Configure jupyterlab with jupyterhub_config.py file
+config_jupyterlab
+
+#=================================================
+# DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
+#=================================================
+
+setup_source $miniconda_architecture
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# ADD HUB EXTENSION
+#=================================================
+
+jupyter labextension install @jupyterlab/hub-extension
+jupyter lab build
+
+chown $admin -R $final_path/share/jupyter
+
+#=================================================
+# CONFIGURE JUPYTER NOTEBOOK
+#=================================================
+config_jupyter_notebook
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+add_systemd_config
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+# If app is public, add url to SSOWat conf as skipped_uris
+if [[ $is_public -eq 1 ]]; then
+  # See install script
+  ynh_app_setting_set "$app" unprotected_uris "/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app --log "systemd"
+
+#=================================================
+# START SERVICE
+#=================================================
+
+ynh_systemd_action -n $app -a restart -l "JupyterHub is now running at" -p "systemd"
