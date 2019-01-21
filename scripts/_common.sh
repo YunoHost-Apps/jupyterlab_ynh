@@ -134,21 +134,26 @@ setup_source() {
 	if [ "$src_filename" = "" ] ; then
 		src_filename="${src_id}.${src_format}"
 	fi
-	local local_src="/opt/yunohost-apps-src/${YNH_APP_ID}/${src_filename}"
 
-	if test -e "$local_src"
-	then	# Use the local source file if it is present
-		cp $local_src $src_filename
-	else	# If not, download the source
-		local out=`wget -nv -O $src_filename $src_url 2>&1` || ynh_print_err $out
+	if ! test -e "$final_path"
+	then
+
+		local local_src="/opt/yunohost-apps-src/${YNH_APP_ID}/${src_filename}"
+
+		if test -e "$local_src"
+		then	# Use the local source file if it is present
+			cp $local_src $src_filename
+		else	# If not, download the source
+			local out=`wget -nv -O $src_filename $src_url 2>&1` || ynh_print_err $out
+		fi
+
+		# Check the control sum
+		echo "${src_sum} ${src_filename}" | ${src_sumprg} -c --status \
+			|| ynh_die "Corrupt source"
+
+		bash $src_filename -b -p $final_path
 	fi
-
-	# Check the control sum
-	echo "${src_sum} ${src_filename}" | ${src_sumprg} -c --status \
-		|| ynh_die "Corrupt source"
-
-	bash $src_filename -b -p $final_path
-
+	
 	export "PATH=$final_path/bin/:$PATH"
 
 	if [ "$src_id" = "arm" ]
