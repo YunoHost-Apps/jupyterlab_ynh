@@ -6,77 +6,58 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+# IMPORT GENERIC HELPERS
 source /usr/share/yunohost/helpers
 source ./experimental_helper.sh
-
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
 
 # Load common variables and helpers
 source ./_common.sh
 
 #=================================================
-# RETRIEVE ARGUMENTS
+# LOAD SETTINGS
 #=================================================
 
-# Retrieve arguments
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
-admin=$YNH_APP_ARG_ADMIN
-enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
+app=$YNH_APP_INSTANCE_NAME
+
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
+path_url=$(ynh_app_setting_get "$app" path_url)
+admin=$(ynh_app_setting_get "$app" admin)
+is_public=$(ynh_app_setting_get "$app" is_public)
+port=$(ynh_app_setting_get "$app" port)
+port_hub=$(ynh_app_setting_get "$app" port_hub)
+port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
+enable_terminal=$(ynh_app_setting_get "$app" enable_terminal)
 
 #=================================================
-# REGISTER DOMAIN
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 
-# Normalize the url path syntax
+# TODO Add backup/restore scripts
+## Backup the current version of the app
+#ynh_backup_before_upgrade
+#ynh_clean_setup () {
+#	# restore it if the upgrade fails
+#	ynh_restore_upgradebackup
+#}
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# CHECK THE PATH
+#=================================================
+
+# Normalize the URL path syntax
 path_url=$(ynh_normalize_url_path $path_url)
 
-# This function check also the availability of this one
-ynh_webpath_register $app $domain $path_url
-
 #=================================================
-# REGISTER DOMAIN
-#=================================================
-
-# Check user parameter
-ynh_user_exists "$admin" \
-  || ynh_die "The chosen admin user does not exist."
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-
-ynh_app_setting_set $app admin $admin
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path_url $path_url
-ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app enable_terminal $is_public
-
-#=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN PORTS
-#=================================================
-
-# Find free ports
-port=$(ynh_find_port 8080)
-port_hub=$(ynh_find_port $(($port + 1)))
-port_http_proxy=$(ynh_find_port $(($port_hub + 1)))
-
-yunohost firewall allow --no-upnp TCP $port 2>&1
-yunohost firewall allow --no-upnp TCP $port_hub 2>&1
-yunohost firewall allow --no-upnp TCP $port_http_proxy 2>&1
-ynh_app_setting_set $app port $port
-ynh_app_setting_set $app port_hub $port_hub
-ynh_app_setting_set $app port_http_proxy $port_http_proxy
-
+# STANDARD UPGRADE STEPS
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
 
-# Create a dedicated nginx config
+# Modify Nginx configuration file and copy it to Nginx conf directory
 ynh_add_nginx_config
 
 #=================================================
@@ -116,17 +97,17 @@ config_jupyter_notebook
 add_systemd_config
 
 #=================================================
+# GENERIC FINALIZATION
+#=================================================
 # SETUP SSOWAT
 #=================================================
 
 # If app is public, add url to SSOWat conf as skipped_uris
 if [[ $is_public -eq 1 ]]; then
-  # unprotected_uris allows SSO credentials to be passed anyway.
+  # See install script
   ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
-#=================================================
-# GENERIC FINALISATION
 #=================================================
 # RELOAD NGINX
 #=================================================
@@ -143,4 +124,4 @@ yunohost service add $app --log "systemd"
 # START SERVICE
 #=================================================
 
-ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"
+ynh_systemd_action -n $app -a restart -l "JupyterHub is now running at" -p "systemd"

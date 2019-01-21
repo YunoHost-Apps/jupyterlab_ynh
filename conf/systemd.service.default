@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Environment="PATH=__FINALPATH__/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-ExecStart=__FINALPATH__/bin/jupyterhub -f __CONFIGPATH__/jupyterhub_config.py 2&>> /var/log/__APP__.log
+ExecStart=__FINALPATH__/bin/jupyterhub -f __CONFIGPATH__/jupyterhub_config.py
 Restart=always
 RestartSec=10
 WorkingDirectory=__FINALPATH__
