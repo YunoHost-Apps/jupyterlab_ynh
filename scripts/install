@@ -31,6 +31,7 @@ enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
 #=================================================
 
 # Normalize the url path syntax
+test -n "$path_url" || path_url="/"
 path_url=$(ynh_normalize_url_path $path_url)
 
 # This function check also the availability of this one

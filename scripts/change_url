@@ -41,6 +41,8 @@ port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
 # CHECK PATHS SYNTAX
 #=================================================
 
+test -n "$old_path" || old_path="/"
+test -n "$new_path" || new_path="/"
 new_path=$(ynh_normalize_url_path $new_path)
 old_path=$(ynh_normalize_url_path $old_path)
 
