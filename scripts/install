@@ -53,7 +53,7 @@ ynh_app_setting_set $app admin $admin
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path_url $path_url
 ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app enable_terminal $is_public
+ynh_app_setting_set $app enable_terminal $enable_terminal
 
 #=================================================
 # STANDARD MODIFICATIONS
