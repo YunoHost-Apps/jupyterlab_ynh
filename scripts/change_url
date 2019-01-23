@@ -80,6 +80,8 @@ nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
 if [ $change_path -eq 1 ]
 then
+	domain="$old_domain"
+	path_url="$new_path"
 	ynh_add_nginx_config
 fi
 
