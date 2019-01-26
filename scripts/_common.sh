@@ -34,6 +34,8 @@ create_dir() {
 # CONFIGURATION FILES FOR JUPYTERLAB
 #=================================================
 config_jupyterlab() {
+	ynh_print_info "Configuring JupyterLab..."
+
 	create_dir
 
 	jupyterlab_conf_path="$config_path/jupyterhub_config.py"
@@ -55,6 +57,8 @@ config_jupyterlab() {
 }
 
 config_jupyter_notebook() {
+	ynh_print_info "Configuring Jupyter Notebook..."
+
 	jupyter_notebook_conf_path="$final_path/etc/jupyter/jupyter_notebook_config.py"
 
 	ynh_backup_if_checksum_is_different $jupyter_notebook_conf_path
@@ -71,6 +75,8 @@ config_jupyter_notebook() {
 # CREATE A DEDICATED SYSTEMD CONFIG
 #=================================================
 add_systemd_config () {
+	ynh_print_info "Adding Jupyterlab as a service..."
+
 	sudo cp ../conf/systemd.service.default ../conf/systemd.service
 	tempsystemdconf="../conf/systemd.service"
 
@@ -85,6 +91,8 @@ add_systemd_config () {
 # REMOVE THE CONFIGURATION FILE FOR JUPYTERLAB
 #=================================================
 remove_config_jupyterlab() {
+	ynh_print_info "Removing the configuration file..."
+
 	ynh_secure_remove "$config_path/jupyterhub_config.py"
 }
 
@@ -140,6 +148,9 @@ setup_source() {
 
 		local local_src="/opt/yunohost-apps-src/${YNH_APP_ID}/${src_filename}"
 
+	ynh_print_info "Downloading anaconda files (used by JupyterLab)..."
+
+
 		if test -e "$local_src"
 		then	# Use the local source file if it is present
 			cp $local_src $src_filename
@@ -151,10 +162,15 @@ setup_source() {
 		echo "${src_sum} ${src_filename}" | ${src_sumprg} -c --status \
 			|| ynh_die "Corrupt source"
 
+	ynh_print_info "Installing anaconda (used by JupyterLab)..."
+
 		bash $src_filename -b -p $final_path
 	fi
 	
 	export "PATH=$final_path/bin/:$PATH"
+
+	ynh_print_info "Installing JupyterLab..."
+
 
 	if [ "$src_id" = "arm" ]
 	then

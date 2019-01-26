@@ -54,6 +54,8 @@ remove_config_jupyterlab
 # REMOVE APP MAIN DIR
 #=================================================
 
+ynh_print_info "Removing JupyterLab..."
+
 ynh_secure_remove "$final_path"
 ynh_secure_remove "$config_path"
 

@@ -11,6 +11,7 @@
 # | arg: -t, --timeout=      - Timeout - The maximum time to wait before ending the watching. Default : 300 seconds.
 # | arg: -e, --length=       - Length of the error log : Default : 20
 ynh_systemd_action() {
+
     # Declare an array to define the options of this helper.
     declare -Ar args_array=( [n]=service_name= [a]=action= [l]=line_match= [p]=log_path= [t]=timeout= [e]=length= )
     local service_name
@@ -28,6 +29,8 @@ ynh_systemd_action() {
     local log_path="${log_path:-/var/log/$service_name/$service_name.log}"
     local length=${length:-20}
     local timeout=${timeout:-300}
+
+    ynh_print_info "Waiting for a response from $service_name..."
 
     # Start to read the log
     if [[ -n "${line_match:-}" ]]

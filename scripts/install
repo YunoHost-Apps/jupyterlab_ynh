@@ -61,6 +61,8 @@ ynh_app_setting_set $app enable_terminal $enable_terminal
 # FIND AND OPEN PORTS
 #=================================================
 
+ynh_print_info "Getting ports..."
+
 # Find free ports
 port=$(ynh_find_port 8080)
 port_hub=$(ynh_find_port $(($port + 1)))
