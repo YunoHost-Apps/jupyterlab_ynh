@@ -71,6 +71,8 @@ ynh_install_app_dependencies openssh-server
 
 ynh_print_info "Restoring configuration files of JupyerLab..."
 
+create_dir
+
 ynh_restore_file "$config_path/jupyterhub_config.py"
 
 #=================================================
