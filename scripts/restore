@@ -1,0 +1,104 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+if [ ! -e _common.sh ]; then
+	# Get the _common.sh file if it's not in the current directory
+	cp ../settings/scripts/_common.sh ./_common.sh
+	mkdir ./upgrade.d
+	mkdir ../conf
+	cp ../settings/scripts/upgrade.d/*.sh ./upgrade.d/*.sh
+	cp ../settings/conf/*.default ../conf/
+	chmod a+rx _common.sh upgrade.d/*.sh
+fi
+
+# Load common variables and helpers
+source _common.sh
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+ynh_clean_setup() {
+
+	true
+}
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+# Copy NGINX configuration
+domain=$(ynh_app_setting_get "$app" domain)
+path_url=$(ynh_app_setting_get "$app" path_url)
+
+#=================================================
+# CHECK IF THE APP CAN BE RESTORED
+#=================================================
+
+ynh_webpath_available $domain $path_url ||
+	ynh_die "Path not available: ${domain}${path_url}"
+test ! -d $final_path ||
+	ynh_die "There is already a directory: $final_path "
+
+#=================================================
+# STANDARD RESTORATION STEPS
+#=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+
+ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+
+ynh_install_app_dependencies openssh-server
+
+#=================================================
+# RESTORE CONF FILES
+#=================================================
+
+ynh_print_info "Restoring configuration files of JupyerLab..."
+
+ynh_backup "$config_path/jupyterhub_config.py"
+
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+
+ynh_print_info "Restoring JupyterLab..."
+
+setup_source $architecture
+
+ynh_backup "$final_path/etc/jupyter/jupyter_notebook_config.py"
+
+#=================================================
+# SPECIFIC RESTORATION
+#=================================================
+# RESTORE SYSTEMD
+#=================================================
+
+ynh_restore_file "/etc/systemd/system/$app.service"
+
+yunohost service add $app --log "/var/log/$app/APP.log"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
+
+ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"

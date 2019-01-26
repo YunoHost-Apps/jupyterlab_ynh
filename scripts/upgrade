@@ -82,6 +82,8 @@ setup_source $miniconda_architecture
 jupyter labextension install @jupyterlab/hub-extension
 jupyter lab build
 
+jupyterhub upgrade-db
+
 chown $admin -R $final_path/share/jupyter
 
 #=================================================

@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+# Load common variables and helpers
+source ../settings/scripts/_common.sh
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+ynh_clean_setup() {
+
+	true
+}
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+# Copy NGINX configuration
+domain=$(ynh_app_setting_get "$app" domain)
+
+#=================================================
+# STANDARD BACKUP STEPS
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
+
+ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# BACKUP JUPYTERLAB
+#=================================================
+
+ynh_print_info "Backuping of JupyterLab..."
+
+ynh_backup "$final_path/jupyterhub.sqlite"
+
+#=================================================
+# BACKUP CONF FILES
+#=================================================
+
+ynh_print_info "Backuping configuration files of JupyterLab..."
+
+ynh_backup "$config_path/jupyterhub_config.py"
+ynh_backup "$final_path/etc/jupyter/jupyter_notebook_config.py"
+
+#=================================================
+# BACKUP SYSTEMD
+#=================================================
+
+ynh_backup "/etc/systemd/system/$app.service"
+
