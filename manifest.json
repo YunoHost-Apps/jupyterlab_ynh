@@ -21,7 +21,7 @@
         "nginx"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain",
@@ -43,7 +43,7 @@
             },
             {
                 "name": "admin",
-		"type": "user",
+                "type": "user",
                 "ask": {
                     "en": "Choose an admin user",
                     "fr": "Choisissez l’administrateur"
