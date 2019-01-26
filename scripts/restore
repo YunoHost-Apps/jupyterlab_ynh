@@ -71,7 +71,7 @@ ynh_install_app_dependencies openssh-server
 
 ynh_print_info "Restoring configuration files of JupyerLab..."
 
-ynh_backup "$config_path/jupyterhub_config.py"
+ynh_restore_file "$config_path/jupyterhub_config.py"
 
 #=================================================
 # RESTORE THE APP MAIN DIR
@@ -81,7 +81,7 @@ ynh_print_info "Restoring JupyterLab..."
 
 setup_source $architecture
 
-ynh_backup "$final_path/etc/jupyter/jupyter_notebook_config.py"
+ynh_restore_file "$final_path/etc/jupyter/jupyter_notebook_config.py"
 
 #=================================================
 # SPECIFIC RESTORATION
