@@ -81,7 +81,7 @@ ynh_restore_file "$config_path/jupyterhub_config.py"
 
 ynh_print_info "Restoring JupyterLab..."
 
-setup_source $architecture
+setup_source $miniconda_architecture
 
 ynh_restore_file "$final_path/etc/jupyter/jupyter_notebook_config.py"
 
