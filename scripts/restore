@@ -15,15 +15,17 @@ ynh_abort_if_errors
 if [ ! -e _common.sh ]; then
 	# Get the _common.sh file if it's not in the current directory
 	cp ../settings/scripts/_common.sh ./_common.sh
+	cp ../settings/scripts/experimental_helper.sh ./experimental_helper.sh
 	mkdir ./upgrade.d
 	mkdir ../conf
-	cp ../settings/scripts/upgrade.d/*.sh ./upgrade.d/*.sh
+	cp ../settings/scripts/upgrade.d/*.sh ./upgrade.d/
 	cp ../settings/conf/*.default ../conf/
-	chmod a+rx _common.sh upgrade.d/*.sh
+	chmod a+rx _common.sh experimental_helper.sh upgrade.d/*
 fi
 
 # Load common variables and helpers
 source _common.sh
+source experimental_helper.sh
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -92,8 +94,9 @@ ynh_restore_file "$final_path/etc/jupyter/jupyter_notebook_config.py"
 #=================================================
 
 ynh_restore_file "/etc/systemd/system/$app.service"
+systemctl enable $app.service
 
-yunohost service add $app --log "/var/log/$app/APP.log"
+yunohost service add $app --log "systemd"
 
 #=================================================
 # GENERIC FINALIZATION
