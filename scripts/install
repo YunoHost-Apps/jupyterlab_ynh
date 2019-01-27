@@ -42,8 +42,8 @@ ynh_webpath_register $app $domain $path_url
 #=================================================
 
 # Check user parameter
-ynh_user_exists "$admin" \
-  || ynh_die "The chosen admin user does not exist."
+ynh_user_exists "$admin" ||
+	ynh_die "The chosen admin user does not exist."
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -60,6 +60,8 @@ ynh_app_setting_set $app enable_terminal $enable_terminal
 #=================================================
 # FIND AND OPEN PORTS
 #=================================================
+
+ynh_print_info "Getting ports..."
 
 # Find free ports
 port=$(ynh_find_port 8080)
@@ -122,8 +124,8 @@ add_systemd_config
 
 # If app is public, add url to SSOWat conf as skipped_uris
 if [[ $is_public -eq 1 ]]; then
-  # unprotected_uris allows SSO credentials to be passed anyway.
-  ynh_app_setting_set "$app" unprotected_uris "/"
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 #=================================================

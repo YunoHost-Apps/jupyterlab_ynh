@@ -37,8 +37,7 @@ ynh_remove_systemd_config
 #=================================================
 
 # Remove a service from the admin panel, added by `yunohost service add`
-if yunohost service status | grep -q $app
-then
+if yunohost service status | grep -q $app; then
 	echo "Remove $app service"
 	yunohost service remove $app
 fi
@@ -54,6 +53,8 @@ remove_config_jupyterlab
 # REMOVE APP MAIN DIR
 #=================================================
 
+ynh_print_info "Removing JupyterLab..."
+
 ynh_secure_remove "$final_path"
 ynh_secure_remove "$config_path"
 
@@ -64,18 +65,15 @@ ynh_secure_remove "/var/log/$app.log"
 # CLOSE PORTS
 #=================================================
 
-if yunohost firewall list | grep -q "\- $port$"
-then
+if yunohost firewall list | grep -q "\- $port$"; then
 	echo "Close port $port" >&2
 	yunohost firewall disallow TCP $port 2>&1
 fi
-if yunohost firewall list | grep -q "\- $port_hub$"
-then
+if yunohost firewall list | grep -q "\- $port_hub$"; then
 	echo "Close port $port_hub" >&2
 	yunohost firewall disallow TCP $port_hub 2>&1
 fi
-if yunohost firewall list | grep -q "\- $port_http_proxy$"
-then
+if yunohost firewall list | grep -q "\- $port_http_proxy$"; then
 	echo "Close port $port_http_proxy" >&2
 	yunohost firewall disallow TCP $port_http_proxy 2>&1
 fi
