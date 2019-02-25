@@ -10,8 +10,8 @@
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
     "license": "BSD-3-Clause",
     "maintainer": {
-        "name": "bourreP",
-        "email": ""
+        "name": "kay0u",
+        "email": "pierre@kayou.io"
     },
     "requirements": {
         "yunohost": ">> 3.0.0"
