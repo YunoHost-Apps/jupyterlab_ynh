@@ -169,10 +169,10 @@ setup_source() {
 	ynh_print_info "Installing JupyterLab..."
 
 	if [ "$src_id" = "arm" ]; then
-		conda install jupyterlab=$jupyterlab_version notebook nodejs -y
+		conda install jupyterlab=$jupyterlab_version notebook nodejs pyyaml -y
 		pip install jupyterhub jupyterhub-ldapauthenticator
 	else
-		conda install -c conda-forge jupyterlab=$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator nodejs -y
+		conda install -c conda-forge jupyterlab=$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator nodejs pyyaml -y
 	fi
 
 	npm install -g configurable-http-proxy
