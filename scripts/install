@@ -6,144 +6,200 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+source _common.sh
 source /usr/share/yunohost/helpers
-source ./experimental_helper.sh
 
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+ynh_clean_setup () {
+	ynh_clean_check_starting
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Load common variables and helpers
-source ./_common.sh
-
 #=================================================
-# RETRIEVE ARGUMENTS
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-# Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 admin=$YNH_APP_ARG_ADMIN
 enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
 
-#=================================================
-# REGISTER DOMAIN
-#=================================================
-
-# Normalize the url path syntax
-test -n "$path_url" || path_url="/"
-path_url=$(ynh_normalize_url_path $path_url)
-
-# This function check also the availability of this one
-ynh_webpath_register $app $domain $path_url
+app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
-# REGISTER DOMAIN
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
-# Check user parameter
-ynh_user_exists "$admin" ||
-	ynh_die "The chosen admin user does not exist."
+final_path=/opt/$app
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
+
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_script_progression --message="Storing installation settings..." --weight=1
 
-ynh_app_setting_set $app admin $admin
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path_url $path_url
-ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app enable_terminal $enable_terminal
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
-# FIND AND OPEN PORTS
+# FIND AND OPEN A PORT
 #=================================================
+ynh_script_progression --message="Configuring firewall..." --weight=1
 
-ynh_print_info "Getting ports..."
+# Find a free port
+port=$(ynh_find_port --port=8080)
+port_hub=$(ynh_find_port --port=$(($port + 1)))
+port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
 
-# Find free ports
-port=$(ynh_find_port 8080)
-port_hub=$(ynh_find_port $(($port + 1)))
-port_http_proxy=$(ynh_find_port $(($port_hub + 1)))
+# Open this port
+#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_hub
+#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_http_proxy
+ynh_app_setting_set --app=$app --key=port --value=$port
+ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
+ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
 
-yunohost firewall allow --no-upnp TCP $port 2>&1
-yunohost firewall allow --no-upnp TCP $port_hub 2>&1
-yunohost firewall allow --no-upnp TCP $port_http_proxy 2>&1
-ynh_app_setting_set $app port $port
-ynh_app_setting_set $app port_hub $port_hub
-ynh_app_setting_set $app port_http_proxy $port_http_proxy
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=23
+
+ynh_install_app_dependencies $pkg_dependencies
+
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=8
+
+pip3 install pipenv
+
+npm install -g configurable-http-proxy
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Setting up source files..." --weight=64
+
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+
+source ./upgrade.d/upgrade.sh
+
+mkdir -p $final_path
+
+pushd $final_path
+
+export PIPENV_VENV_IN_PROJECT="enabled"
+
+ynh_exec_warn_less pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
+
+popd
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Configuring nginx web server..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
 #=================================================
-# CONFIGURE JUPYTERLAB
-#=================================================
-
-# Configure jupyterlab with jupyterhub_config.py file
-config_jupyterlab
-
-#=================================================
-# DOWNLOAD, CHECK AND INSTALL JUPYTERLAB
-#=================================================
-
-setup_source $miniconda_architecture
-
-#=================================================
 # SPECIFIC SETUP
-#=================================================
-# ADD HUB EXTENSION
-#=================================================
-
-jupyter labextension install @jupyterlab/hub-extension
-jupyter lab build
-
-chown $admin -R $final_path/share/jupyter
-
-#=================================================
-# CONFIGURE JUPYTER NOTEBOOK
-#=================================================
-config_jupyter_notebook
-
 #=================================================
 # SETUP SYSTEMD
 #=================================================
+ynh_script_progression --message="Configuring a systemd service..." --weight=3
 
 # Create a dedicated systemd config
-add_systemd_config
+ynh_replace_string --match_string="__NODE_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
+
+ynh_add_systemd_config
 
 #=================================================
-# SETUP SSOWAT
+# MODIFY A CONFIG FILE
 #=================================================
 
-# If app is public, add url to SSOWat conf as skipped_uris
-if [[ $is_public -eq 1 ]]; then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
-fi
+mkdir -p "$final_path/config"
+
+# JupyterHub configuration
+cp -f ../conf/jupyterhub_config.py $final_path/config/jupyterhub_config.py
+
+ynh_replace_string --match_string="__URL__" --replace_string="https://$domain" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__PATH__" --replace_string="${path_url%/}" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__PORT_HUB__" --replace_string="$port_hub" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__PORT_HTTP_PROXY__" --replace_string="$port_http_proxy" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__FINAL_PATH__" --replace_string="$final_path" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/config/jupyterhub_config.py"
+
+# Jupyter notebook configuration
+cp -f ../conf/jupyter_notebook_config.py $final_path/config/jupyter_notebook_config.py
+
+ynh_replace_string --match_string="__ENABLE_TERMINAL__" --replace_string="$enable_terminal" --target_file="$final_path/config/jupyter_notebook_config.py"
 
 #=================================================
-# GENERIC FINALISATION
-#=================================================
-# RELOAD NGINX
+# STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-systemctl reload nginx
+# Calculate and store the config file checksum into the app settings
+ynh_store_file_checksum --file="$final_path/config/jupyterhub_config.py"
+ynh_store_file_checksum --file="$final_path/config/jupyter_notebook_config.py"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions to app files
+chown -R root: $final_path
+chown -R $admin: $final_path/.venv/share
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --log "systemd"
+yunohost service add $app --description "$app daemon" --log_type "systemd" --log "$app"
 
 #=================================================
-# START SERVICE
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=3
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring SSOwat..." --weight=4
+
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading nginx web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
 #=================================================
 
-ynh_systemd_action -n $app -a start -l "JupyterHub is now running at" -p "systemd"
+ynh_script_progression --message="Installation of $app completed" --last

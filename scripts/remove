@@ -6,86 +6,93 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-# Source YunoHost helpers
+source _common.sh
 source /usr/share/yunohost/helpers
-
-# Load common variables and helpers
-source ./_common.sh
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
-# See comments in install script
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get "$app" domain)
-port=$(ynh_app_setting_get "$app" port)
-port_hub=$(ynh_app_setting_get "$app" port_hub)
-port_http_proxy=$(ynh_app_setting_get "$app" port_http_proxy)
+
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+port=$(ynh_app_setting_get --app=$app --key=port)
+port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
+port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
 # STANDARD REMOVE
-#=================================================
-# STOP AND REMOVE SERVICE
-#=================================================
-
-# Remove the dedicated systemd config
-ynh_remove_systemd_config
-
 #=================================================
 # REMOVE SERVICE FROM ADMIN PANEL
 #=================================================
 
 # Remove a service from the admin panel, added by `yunohost service add`
-if yunohost service status | grep -q $app; then
-	echo "Remove $app service"
+if ynh_exec_warn_less yunohost service status $app >/dev/null
+then
+	ynh_script_progression --message="Removing $app service..." --weight=2
 	yunohost service remove $app
 fi
 
 #=================================================
-# REMOVE CONF FILE
+# STOP AND REMOVE SERVICE
 #=================================================
+ynh_script_progression --message="Stopping and removing the systemd service..." --weight=2
 
-# Remove Config
-remove_config_jupyterlab
+# Remove the dedicated systemd config
+ynh_remove_systemd_config
+
+#=================================================
+# REMOVE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Removing dependencies..." --weight=4
+
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
+
+ynh_remove_nodejs
 
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
+ynh_script_progression --message="Removing app main directory..." --weight=1
 
-ynh_print_info "Removing JupyterLab..."
-
-ynh_secure_remove "$final_path"
-ynh_secure_remove "$config_path"
-
-# Remove the log files
-ynh_secure_remove "/var/log/$app.log"
-
-#=================================================
-# CLOSE PORTS
-#=================================================
-
-if yunohost firewall list | grep -q "\- $port$"; then
-	echo "Close port $port" >&2
-	yunohost firewall disallow TCP $port 2>&1
-fi
-if yunohost firewall list | grep -q "\- $port_hub$"; then
-	echo "Close port $port_hub" >&2
-	yunohost firewall disallow TCP $port_hub 2>&1
-fi
-if yunohost firewall list | grep -q "\- $port_http_proxy$"; then
-	echo "Close port $port_http_proxy" >&2
-	yunohost firewall disallow TCP $port_http_proxy 2>&1
-fi
+# Remove the app directory securely
+ynh_secure_remove --file="$final_path"
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Removing nginx web server configuration..." --weight=1
 
+# Remove the dedicated nginx config
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE LOGROTATE CONFIGURATION
+# CLOSE A PORT
 #=================================================
 
-#ynh_remove_logrotate
+if yunohost firewall list | grep -q "\- $port$"
+then
+	ynh_script_progression --message="Closing port $port..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port
+fi
+
+if yunohost firewall list | grep -q "\- $port_hub$"
+then
+	ynh_script_progression --message="Closing port $port_hub..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port_hub
+fi
+
+if yunohost firewall list | grep -q "\- $port_http_proxy$"
+then
+	ynh_script_progression --message="Closing port $port_http_proxy..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port_http_proxy
+fi
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Removal of $app completed" --last
