@@ -1,6 +1,0 @@
-SOURCE_URL=https://github.com/jjhelmus/berryconda/releases/download/v__VERSION__/Berryconda3-__VERSION__-Linux-armv7l.sh
-SOURCE_SUM=__MD5_SUM__
-SOURCE_SUM_PRG=md5sum
-SOURCE_FILENAME=Berryconda3-__VERSION__-Linux-armv7l.sh
-SOURCE_EXTRACT=false
-SOURCE_FORMAT=sh
