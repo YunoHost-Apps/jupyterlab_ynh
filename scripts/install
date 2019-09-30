@@ -99,9 +99,7 @@ mkdir -p $final_path
 
 pushd $final_path
 
-export PIPENV_VENV_IN_PROJECT="enabled"
-
-ynh_exec_warn_less pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
+PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
 
 popd
 
