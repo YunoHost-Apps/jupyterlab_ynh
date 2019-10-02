@@ -3,7 +3,7 @@ Description=Jupyterlab
 After=syslog.target network.target
 
 [Service]
-Environment="PATH=__NODE_PATH__:__FINALPATH__/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;JUPYTER_CONFIG_DIR=__FINALPATH__/config"
+Environment="PATH=__NODE_PATH__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ExecStart=/usr/local/bin/pipenv run jupyterhub -f __FINALPATH__/config/jupyterhub_config.py
 Restart=always
 RestartSec=10

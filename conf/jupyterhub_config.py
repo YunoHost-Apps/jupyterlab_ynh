@@ -553,7 +553,7 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #  Some spawners allow shell-style expansion here, allowing you to use
 #  environment variables here. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
-#c.Spawner.args = []
+c.Spawner.args = ['--config=__FINAL_PATH__/config/jupyter_notebook_config.py']
 
 ## The command used for starting the single-user server.
 #  
