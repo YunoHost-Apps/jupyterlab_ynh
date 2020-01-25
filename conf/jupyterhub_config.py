@@ -39,6 +39,14 @@
 ## Duration (in seconds) to determine the number of active users.
 #c.JupyterHub.active_user_window = 1800
 
+## Resolution (in seconds) for updating activity
+#  
+#  If activity is registered that is less than activity_resolution seconds more
+#  recent than the current value, the new value will be ignored.
+#  
+#  This avoids too many writes to the Hub database.
+#c.JupyterHub.activity_resolution = 30
+
 ## Grant admin users permission to access single-user servers.
 #  
 #  Users should be properly informed if this is enabled.
@@ -53,15 +61,14 @@
 ## Answer yes to any questions (e.g. confirm overwrite)
 #c.JupyterHub.answer_yes = False
 
-## PENDING DEPRECATION: consider using service_tokens
+## PENDING DEPRECATION: consider using services
 #  
 #  Dict of token:username to be loaded into the database.
 #  
 #  Allows ahead-of-time generation of API tokens for use by externally managed
 #  services, which authenticate as JupyterHub users.
 #  
-#  Consider using service_tokens for general services that talk to the JupyterHub
-#  API.
+#  Consider using services for general services that talk to the JupyterHub API.
 #c.JupyterHub.api_tokens = {}
 
 ## Authentication for prometheus metrics
@@ -84,10 +91,9 @@
 #              e.g. `c.JupyterHub.authenticator_class = 'pam'`
 #  
 #  Currently installed: 
-#    - default: jupyterhub.auth.PAMAuthenticator
 #    - dummy: jupyterhub.auth.DummyAuthenticator
 #    - pam: jupyterhub.auth.PAMAuthenticator
-#c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+#    - default: jupyterhub.auth.PAMAuthenticator
 c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 
 ## The base URL of the entire application.
@@ -165,7 +171,7 @@ c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 #c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 ## The location of jupyterhub data files (e.g. /usr/local/share/jupyterhub)
-#c.JupyterHub.data_files_path = '/usr/local/share/jupyterhub'
+#c.JupyterHub.data_files_path = '/opt/jupyterlab/.venv/share/jupyterhub'
 
 ## Include any kwargs to pass to the database connection. See
 #  sqlalchemy.create_engine for details.
@@ -179,6 +185,10 @@ c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 
 ## DEPRECATED since version 0.8: Use ConfigurableHTTPProxy.debug
 #c.JupyterHub.debug_proxy = False
+
+## If named servers are enabled, default name of server to spawn or open, e.g. by
+#  user-redirect.
+#c.JupyterHub.default_server_name = ''
 
 ## The default URL for users when they arrive (e.g. when user directs to "/")
 #  
@@ -296,6 +306,21 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #  
 #  See also `hub_ip` for the ip and `hub_bind_url` for setting the full bind URL.
 #c.JupyterHub.hub_port = 8081
+
+## Timeout (in seconds) to wait for spawners to initialize
+#  
+#  Checking if spawners are healthy can take a long time if many spawners are
+#  active at hub start time.
+#  
+#  If it takes longer than this timeout to check, init_spawner will be left to
+#  complete in the background and the http server is allowed to start.
+#  
+#  A timeout of -1 means wait forever, which can mean a slow startup of the Hub
+#  but ensures that the Hub is fully consistent by the time it starts responding
+#  to requests. This matches the behavior of jupyterhub 1.0.
+#  
+#  .. versionadded: 1.1.0
+#c.JupyterHub.init_spawners_timeout = 10
 
 ## The location to store certificates automatically created by JupyterHub.
 #  
@@ -534,6 +559,17 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #  backed up to a local file automatically.
 #c.JupyterHub.upgrade_db = False
 
+## Callable to affect behavior of /user-redirect/
+#  
+#  Receives 4 parameters: 1. path - URL path that was provided after /user-
+#  redirect/ 2. request - A Tornado HTTPServerRequest representing the current
+#  request. 3. user - The currently authenticated user. 4. base_url - The
+#  base_url of the current hub, for relative redirects
+#  
+#  It should return the new URL to redirect to, or None to preserve current
+#  behavior.
+#c.JupyterHub.user_redirect_hook = None
+
 #------------------------------------------------------------------------------
 # Spawner(LoggingConfigurable) configuration
 #------------------------------------------------------------------------------
@@ -554,6 +590,19 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #  environment variables here. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
 c.Spawner.args = ['--config=__FINAL_PATH__/config/jupyter_notebook_config.py']
+
+## An optional hook function that you can implement to pass `auth_state` to the
+#  spawner after it has been initialized but before it starts. The `auth_state`
+#  dictionary may be set by the `.authenticate()` method of the authenticator.
+#  This hook enables you to pass some or all of that information to your spawner.
+#  
+#  Example::
+#  
+#      def userdata_hook(spawner, auth_state):
+#          spawner.userdata = auth_state["userdata"]
+#  
+#      c.Spawner.auth_state_hook = userdata_hook
+#c.Spawner.auth_state_hook = None
 
 ## The command used for starting the single-user server.
 #  
@@ -713,7 +762,7 @@ c.Spawner.default_url = '/lab'
 #  
 #  Note that this does *not* prevent users from accessing files outside of this
 #  path! They can do so with many other means.
-c.Spawner.notebook_dir = '~/'
+#c.Spawner.notebook_dir = ''
 
 ## An HTML form for options a user can specify on launching their server.
 #  
@@ -947,7 +996,7 @@ c.Authenticator.admin_users = ["__ADMIN__"]
 #c.CryptKeeper.keys = []
 
 ## The number of threads to allocate for encryption
-#c.CryptKeeper.n_threads = 8
+#c.CryptKeeper.n_threads = 12
 
 c.LDAPAuthenticator.bind_dn_template = [ "uid={username},ou=users,dc=yunohost,dc=org" ]
 c.LDAPAuthenticator.server_address = 'localhost'

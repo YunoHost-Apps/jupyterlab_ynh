@@ -2,7 +2,7 @@
     "name": "JupyterLab",
     "id": "jupyterlab",
     "packaging_format": 1,
-    "version": "1.1.4~ynh1",
+    "version": "1.2.6~ynh1",
     "description": {
         "en": "JupyterLab for Yunohost, an extensible environment for interactive and reproducible computing (notebook, terminal, text editor, file browser, rich outputs, etc.)",
         "fr": "JupyterLab pour YunoHost, un environnement informatique extensible, interactif et reproductible (bloc-notes, terminal, éditeur de texte, explorateur de fichiers, texte enrichi, etc.)"
