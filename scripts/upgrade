@@ -131,6 +131,8 @@ fi
 
 ynh_backup_if_checksum_is_different --file="$final_path/config/jupyterhub_config.py"
 
+mkdir -p "$final_path/config"
+
 cp -f ../conf/jupyterhub_config.py $final_path/config/jupyterhub_config.py
 ynh_replace_string --match_string="__URL__" --replace_string="https://$domain" --target_file="$final_path/config/jupyterhub_config.py"
 ynh_replace_string --match_string="__PATH__" --replace_string="${path_url%/}" --target_file="$final_path/config/jupyterhub_config.py"

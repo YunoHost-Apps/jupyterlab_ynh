@@ -1,1 +1,1 @@
-jupyterlab_version="1.1.4"
+jupyterlab_version="1.2.6"
