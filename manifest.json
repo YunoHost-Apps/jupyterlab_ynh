@@ -4,8 +4,8 @@
     "packaging_format": 1,
     "version": "1.2.6~ynh1",
     "description": {
-        "en": "JupyterLab for Yunohost, an extensible environment for interactive and reproducible computing (notebook, terminal, text editor, file browser, rich outputs, etc.)",
-        "fr": "JupyterLab pour YunoHost, un environnement informatique extensible, interactif et reproductible (bloc-notes, terminal, éditeur de texte, explorateur de fichiers, texte enrichi, etc.)"
+        "en": "An extensible environment for interactive and reproducible computing (notebook, terminal, text editor, file browser, rich outputs, etc.)",
+        "fr": "Un environnement informatique extensible, interactif et reproductible (bloc-notes, terminal, éditeur de texte, explorateur de fichiers, texte enrichi, etc.)"
     },
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
     "license": "BSD-3-Clause",
