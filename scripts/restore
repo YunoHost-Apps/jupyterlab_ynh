@@ -77,7 +77,7 @@ ynh_install_app_dependencies $pkg_dependencies
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=8
 
-pip3 install pipenv
+python3 -m pip install pipenv
 
 npm install -g configurable-http-proxy
 
