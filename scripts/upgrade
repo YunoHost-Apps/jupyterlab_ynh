@@ -99,7 +99,7 @@ ynh_exec_warn_less ynh_install_nodejs --nodejs_version=8
 
 npm install -g configurable-http-proxy
 
-pip3 install pipenv
+python3 -m pip install pipenv
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -116,9 +116,9 @@ then
 
 	pushd $final_path
 
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
 
-	ynh_exec_warn_less pipenv run jupyterhub upgrade-db
+	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
 
 	popd
 fi
