@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="python3-pip"
+pkg_dependencies="python3-pip libffi-dev"
 
 #=================================================
 # PERSONAL HELPERS
