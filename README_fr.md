@@ -27,14 +27,19 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 
 ## Documentation
 
- * Documentation officielle: [Lien vers la documentation officielle de cette application](https://jupyterlab.readthedocs.io/en/stable/)
+* Documentation officielle: [Lien vers la documentation officielle de cette application](https://jupyterlab.readthedocs.io/en/stable/)
 
 ## Caractéristiques spécifiques YunoHost
 
 #### Support multi-utilisateurs
 
+<<<<<<< Updated upstream
  * L'authentification LDAP et HTTP est-elle prise en charge? **Oui**
  * L'application peut-elle être utilisée par plusieurs utilisateurs? **Oui**
+=======
+* L'authentification LDAP est-elle prise en charge? **Oui**
+* L'application peut-elle être utilisée par plusieurs utilisateurs? **Oui**
+>>>>>>> Stashed changes
 
 #### Architectures supportées
 
@@ -44,9 +49,9 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 
 ## Liens
 
- * Signaler un bug: https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
- * Site de l'application: https://jupyter.org/index.html
- * Site web YunoHost: https://yunohost.org/
+* Signaler un bug: https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
+* Site de l'application: https://jupyter.org/index.html
+* Site web YunoHost: https://yunohost.org/
 
 ---
 
