@@ -23,7 +23,7 @@ JupyterLab est une interface utilisateur de nouvelle génération pour le projet
 
 ## Configuration
 
-Comment configurer cette application : via le panneau d'administration, un fichier brut en SSH.
+Comment configurer cette application: via le panneau d'administration, un fichier brut en SSH.
 
 ## Documentation
 
@@ -33,13 +33,10 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 
 #### Support multi-utilisateurs
 
-<<<<<<< Updated upstream
- * L'authentification LDAP et HTTP est-elle prise en charge? **Oui**
- * L'application peut-elle être utilisée par plusieurs utilisateurs? **Oui**
-=======
+* L'authentification LDAP et HTTP est-elle prise en charge? **Oui**
+* L'application peut-elle être utilisée par plusieurs utilisateurs? **Oui**
 * L'authentification LDAP est-elle prise en charge? **Oui**
 * L'application peut-elle être utilisée par plusieurs utilisateurs? **Oui**
->>>>>>> Stashed changes
 
 #### Architectures supportées
 
