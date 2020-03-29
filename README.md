@@ -27,14 +27,14 @@ How to configure this app: by an admin panel, a plain file with SSH.
 
 ## Documentation
 
- * Official documentation: [Link to the official documentation of this app](https://jupyterlab.readthedocs.io/en/stable/)
+* Official documentation: [Link to the official documentation of this app](https://jupyterlab.readthedocs.io/en/stable/)
 
 ## YunoHost specific features
 
 #### Multi-users support
 
-LDAP auth supported? **Yes**
-Can the app be used by multiple users? **Yes**
+* LDAP auth supported? **Yes**
+* Can the app be used by multiple users? **Yes**
 
 #### Supported architectures
 
@@ -44,9 +44,9 @@ Can the app be used by multiple users? **Yes**
 
 ## Links
 
- * Report a bug: https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
- * App website: https://jupyter.org/index.html
- * YunoHost website: https://yunohost.org/
+* Report a bug: https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
+* App website: https://jupyter.org/index.html
+* YunoHost website: https://yunohost.org/
 
 ---
 
