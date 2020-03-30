@@ -1,6 +1,7 @@
 # JupyterLab for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab)  
+[![Integration level](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab)
+![](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg)  
 [![Install jupyterlab with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=jupyterlab)
 
 *[Lire ce readme en français.](./README_fr.md)*
