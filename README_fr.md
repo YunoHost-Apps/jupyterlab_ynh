@@ -5,13 +5,13 @@
 
 *[Read this readme in english.](./README.md)* 
 
-> *Ce package vous permet d'installer jupyterlab rapidement et simplement sur un serveur Yunohost.  
+> *Ce package vous permet d'installer Jupyterlab rapidement et simplement sur un serveur Yunohost.  
 Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
 ## Vue d'ensemble
 JupyterLab est une interface utilisateur de nouvelle génération pour le projet Jupyter offrant tous les modules de Jupyter Notebook (interpréteur Python, terminal, éditeur de texte, navigateur de fichiers, etc.) dans une interface utilisateur flexible et puissante. JupyterLab remplacera à terme Jupyter Notebook.
 
-**Version incluse:** 2.0.1
+**Version incluse:** 2.1.0
 
 ## Captures d'écran
 
@@ -40,7 +40,6 @@ Comment configurer cette application: via le panneau d'administration, un fichie
 
 * x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
-* Jessie x86-64b - [![](https://ci-stretch.nohost.me/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/jupyterlab/)
 
 ## Liens
 
@@ -53,7 +52,6 @@ Comment configurer cette application: via le panneau d'administration, un fichie
 Informations pour les développeurs
 ----------------
 
-**Seulement si vous voulez utiliser une branche de test pour le codage, au lieu de fusionner directement dans la banche principale.**
 Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing).
 
 Pour essayer la branche testing, procédez comme suit.
