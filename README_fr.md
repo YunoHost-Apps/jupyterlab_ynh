@@ -40,7 +40,6 @@ Comment configurer cette application: via le panneau d'administration, un fichie
 
 * x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
-* Jessie x86-64b - [![](https://ci-stretch.nohost.me/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/jupyterlab/)
 
 ## Liens
 
@@ -53,7 +52,6 @@ Comment configurer cette application: via le panneau d'administration, un fichie
 Informations pour les développeurs
 ----------------
 
-**Seulement si vous voulez utiliser une branche de test pour le codage, au lieu de fusionner directement dans la banche principale.**
 Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing).
 
 Pour essayer la branche testing, procédez comme suit.

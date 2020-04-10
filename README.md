@@ -40,7 +40,6 @@ How to configure this app: by an admin panel, a plain file with SSH.
 
 * x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
-* Jessie x86-64b - [![](https://ci-stretch.nohost.me/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/jupyterlab/)
 
 ## Links
 
@@ -53,7 +52,6 @@ How to configure this app: by an admin panel, a plain file with SSH.
 Developers info
 ----------------
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
