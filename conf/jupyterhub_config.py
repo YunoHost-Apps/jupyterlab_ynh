@@ -91,9 +91,9 @@
 #              e.g. `c.JupyterHub.authenticator_class = 'pam'`
 #  
 #  Currently installed: 
-#    - dummy: jupyterhub.auth.DummyAuthenticator
-#    - pam: jupyterhub.auth.PAMAuthenticator
 #    - default: jupyterhub.auth.PAMAuthenticator
+#    - pam: jupyterhub.auth.PAMAuthenticator
+#    - dummy: jupyterhub.auth.DummyAuthenticator
 c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 
 ## The base URL of the entire application.
@@ -108,7 +108,7 @@ c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 ## The public facing URL of the whole JupyterHub application.
 #  
 #  This is the address on which the proxy will bind. Sets protocol, ip, base_url
-c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
+#c.JupyterHub.bind_url = 'http://:8000'
 
 ## Whether to shutdown the proxy when the Hub shuts down.
 #  
@@ -466,8 +466,8 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #              e.g. `c.JupyterHub.spawner_class = 'localprocess'`
 #  
 #  Currently installed: 
-#    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #    - default: jupyterhub.spawner.LocalProcessSpawner
+#    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #    - localprocess: jupyterhub.spawner.LocalProcessSpawner
 #c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
 
