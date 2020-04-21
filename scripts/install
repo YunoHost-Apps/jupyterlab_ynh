@@ -160,8 +160,8 @@ ynh_store_file_checksum --file="$final_path/config/jupyter_notebook_config.py"
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
-chown -R $admin: $final_path/.venv/share
+chown -R $admin: $final_path/
+chmod -R 755 $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
