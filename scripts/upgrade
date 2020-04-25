@@ -116,7 +116,7 @@ then
 
 	pushd $final_path
 
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator --three
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator
 
 	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
 
