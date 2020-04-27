@@ -95,7 +95,7 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=83
 
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=8
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 npm install -g configurable-http-proxy
 
