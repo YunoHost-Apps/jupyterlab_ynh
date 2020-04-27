@@ -170,8 +170,8 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R $admin: $final_path/
-chmod -R 755 $final_path/.venv/
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/lib
 
 #=================================================
 # SETUP SSOWAT
