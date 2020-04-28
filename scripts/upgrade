@@ -110,8 +110,6 @@ then
 	ynh_script_progression --message="Upgrading source files..." --weight=160
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	source ./upgrade.d/upgrade.sh
-
 	mkdir -p $final_path
 
 	pushd $final_path
