@@ -80,7 +80,7 @@ ynh_script_progression --message="Installing dependencies..." --weight=23
 
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=8
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 python3 -m pip install pipenv
 
@@ -92,8 +92,6 @@ npm install -g configurable-http-proxy
 ynh_script_progression --message="Setting up source files..." --weight=64
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-
-source ./upgrade.d/upgrade.sh
 
 mkdir -p $final_path
 
@@ -160,8 +158,8 @@ ynh_store_file_checksum --file="$final_path/config/jupyter_notebook_config.py"
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
-chown -R $admin: $final_path/.venv/share
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
