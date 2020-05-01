@@ -93,8 +93,6 @@ ynh_script_progression --message="Setting up source files..." --weight=64
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
-source ./upgrade.d/upgrade.sh
-
 mkdir -p $final_path
 
 pushd $final_path
@@ -160,8 +158,8 @@ ynh_store_file_checksum --file="$final_path/config/jupyter_notebook_config.py"
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
-chown -R $admin: $final_path/.venv
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL

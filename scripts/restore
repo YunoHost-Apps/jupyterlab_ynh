@@ -62,8 +62,8 @@ ynh_restore_file --origin_path="$final_path"
 #=================================================
 
 # Restore permissions on app files
-chown -R root: $final_path
-chown -R $admin: $final_path/.venv
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/
 
 #=================================================
 # SPECIFIC RESTORATION

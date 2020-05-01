@@ -110,8 +110,6 @@ then
 	ynh_script_progression --message="Upgrading source files..." --weight=160
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	source ./upgrade.d/upgrade.sh
-
 	mkdir -p $final_path
 
 	pushd $final_path
@@ -170,8 +168,8 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
-chown -R $admin: $final_path/.venv
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/
 
 #=================================================
 # SETUP SSOWAT
