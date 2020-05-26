@@ -2,7 +2,7 @@
     "name": "JupyterLab",
     "id": "jupyterlab",
     "packaging_format": 1,
-    "version": "2.1.2~ynh1",
+    "version": "2.1.3~ynh1",
     "description": {
         "en": "An extensible environment for interactive and reproducible computing (notebook, terminal, text editor, file browser, rich outputs, etc.)",
         "fr": "Un environnement informatique extensible, interactif et reproductible (bloc-notes, terminal, éditeur de texte, explorateur de fichiers, texte enrichi, etc.)"
