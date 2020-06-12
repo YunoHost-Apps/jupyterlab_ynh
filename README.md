@@ -38,13 +38,14 @@ How to configure this app: by an admin panel, a plain file with SSH.
 
 #### Supported architectures
 
-* x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
+* x86-64 - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
 
 ## Links
 
 * Report a bug: https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
-* App website: https://jupyter.org/index.html
+* App website: https://jupyter.org
+* Upstream app repository: https://github.com/jupyterhub/jupyterhub
 * YunoHost website: https://yunohost.org/
 
 ---

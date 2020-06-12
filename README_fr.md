@@ -38,13 +38,14 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 
 #### Architectures supportées
 
-* x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
+* x86-64 - [![](https://ci-apps.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
 
 ## Liens
 
 * Signaler un bug : https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
-* Site de l’application : https://jupyter.org/index.html
+* Site de l’application : https://jupyter.org
+* Dépôt de l’application principale : https://github.com/jupyterhub/jupyterhub
 * Site web YunoHost : https://yunohost.org/
 
 ---
@@ -57,6 +58,6 @@ Merci de faire vos pull request sur la [branche testing](https://github.com/Yuno
 Pour essayer la branche testing, procédez comme suit.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing --debug
-or
+ou
 sudo yunohost app upgrade jupyterlab -u https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing --debug
 ```
