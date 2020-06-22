@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="python3-pip libffi-dev"
+pkg_dependencies="python3-pip libffi-dev libzmq3-dev"
 
 nodejs_version="10"
 
