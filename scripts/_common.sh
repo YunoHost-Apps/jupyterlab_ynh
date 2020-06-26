@@ -5,11 +5,11 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="python3-pip libffi-dev"
+pkg_dependencies="python3-dev python3-pip libffi-dev libzmq3-dev"
 
 nodejs_version="10"
 
-jupyterlab_version="2.1.3"
+jupyterlab_version="2.1.5"
 
 #=================================================
 # PERSONAL HELPERS
