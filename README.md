@@ -27,7 +27,8 @@ How to configure this app: by an admin panel, a plain file with SSH.
 
 ## Documentation
 
-* Official documentation: [Link to the official documentation of this app](https://jupyterlab.readthedocs.io/en/stable/)
+* Official documentation: https://jupyterlab.readthedocs.io/en/stable/
+* YunoHost documentation: https://yunohost.org/#/app_jupyterlab
 
 ## YunoHost specific features
 
