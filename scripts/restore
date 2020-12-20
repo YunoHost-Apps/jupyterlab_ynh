@@ -87,13 +87,13 @@ npm install -g configurable-http-proxy
 ynh_script_progression --message="Restoring the systemd configuration..."
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
-systemctl enable $app.service
+systemctl enable $app.service --quiet
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description "$app daemon" --log_type "systemd" --log "$app"
+yunohost service add $app --description="$app daemon" --log="$app"
 
 #=================================================
 # START SYSTEMD SERVICE

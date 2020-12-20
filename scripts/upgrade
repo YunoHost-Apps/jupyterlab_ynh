@@ -172,6 +172,12 @@ chown -R root: $final_path/
 chown -R $admin: $final_path/.venv/
 
 #=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app --description="$app daemon" --log="$app"
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Upgrading SSOwat configuration..."

@@ -165,7 +165,7 @@ chown -R $admin: $final_path/.venv/
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description "$app daemon" --log_type "systemd" --log "$app"
+yunohost service add $app --description="$app daemon" --log="$app"
 
 #=================================================
 # START SYSTEMD SERVICE
