@@ -110,6 +110,14 @@ ynh_script_progression --message="Configuring nginx web server..." --weight=1
 ynh_add_nginx_config
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
+
+# Create a system user
+ynh_system_user_create --username=$app
+
+#=================================================
 # SPECIFIC SETUP
 #=================================================
 # SETUP SYSTEMD
