@@ -3,15 +3,13 @@ Description=JupyterLab
 After=syslog.target network.target
 
 [Service]
-User=__APP__
-Group=__APP__
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
-WorkingDirectory=__FINALPATH__
 Environment="PATH=__NODE_PATH__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ExecStart=/usr/local/bin/pipenv run jupyterhub -f __FINALPATH__/config/jupyterhub_config.py
 Restart=always
 RestartSec=10
+WorkingDirectory=__FINALPATH__
 
 [Install]
 WantedBy=multi-user.target
