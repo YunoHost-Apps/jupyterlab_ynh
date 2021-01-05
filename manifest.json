@@ -6,7 +6,7 @@
         "en": "Code console environment for running Python code interactively.",
         "fr": "Console de code pour exécuter du code Python de manière interactive."
     },
-    "version": "2.2.8~ynh1",
+    "version": "3.0.1~ynh1",
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 3.5"
+        "yunohost": ">= 3.8.1"
     },
     "multi_instance": true,
     "services": [
