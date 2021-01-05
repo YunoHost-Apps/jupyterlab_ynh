@@ -110,6 +110,14 @@ ynh_script_progression --message="Configuring nginx web server..." --weight=1
 ynh_add_nginx_config
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
+
+# Create a system user
+ynh_system_user_create --username=$app
+
+#=================================================
 # SPECIFIC SETUP
 #=================================================
 # SETUP SYSTEMD
@@ -165,7 +173,7 @@ chown -R $admin: $final_path/.venv/
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description "$app daemon" --log_type "systemd" --log "$app"
+yunohost service add $app --description="$app daemon" --log="$app"
 
 #=================================================
 # START SYSTEMD SERVICE
