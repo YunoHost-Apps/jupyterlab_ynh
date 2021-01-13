@@ -104,7 +104,7 @@ popd
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..." --weight=1
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -191,14 +191,13 @@ ynh_script_progression --message="Configuring SSOwat..." --weight=4
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
