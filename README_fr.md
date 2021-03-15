@@ -28,7 +28,7 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 ## Documentation
 
 * Documentation officielle : https://jupyterlab.readthedocs.io/en/stable/
-* Documentation YunoHost : https://yunohost.org/#/app_jupyterlab_fr
+* Documentation YunoHost : https://yunohost.org/fr/app_jupyterlab
 
 ## Caractéristiques spécifiques YunoHost
 
