@@ -11,7 +11,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 ## Vue d’ensemble
 JupyterLab est une interface utilisateur de nouvelle génération pour le projet Jupyter offrant tous les modules de Jupyter Notebook (interpréteur Python, terminal, éditeur de texte, navigateur de fichiers, etc.) dans une interface utilisateur flexible et puissante. JupyterLab remplacera à terme Jupyter Notebook.
 
-**Version incluse :** 3.0.9
+**Version incluse :** 3.0.10
 
 ## Captures d’écran
 
@@ -28,7 +28,7 @@ Comment configurer cette application : via le panneau d'administration, un fichi
 ## Documentation
 
 * Documentation officielle : https://jupyterlab.readthedocs.io/en/stable/
-* Documentation YunoHost : https://yunohost.org/#/app_jupyterlab_fr
+* Documentation YunoHost : https://yunohost.org/fr/app_jupyterlab
 
 ## Caractéristiques spécifiques YunoHost
 
