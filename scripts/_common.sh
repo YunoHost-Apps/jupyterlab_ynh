@@ -9,7 +9,7 @@ pkg_dependencies="python3-dev python3-pip libffi-dev libzmq3-dev"
 
 nodejs_version="14"
 
-jupyterlab_version="3.0.10"
+jupyterlab_version="3.0.13"
 
 #=================================================
 # PERSONAL HELPERS
