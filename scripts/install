@@ -134,29 +134,11 @@ ynh_add_systemd_config
 
 mkdir -p "$final_path/config"
 
-# JupyterHub configuration
-cp -f ../conf/jupyterhub_config.py $final_path/config/jupyterhub_config.py
+path=${path_url%/}
 
-ynh_replace_string --match_string="__URL__" --replace_string="https://$domain" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__PATH__" --replace_string="${path_url%/}" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__PORT_HUB__" --replace_string="$port_hub" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__PORT_HTTP_PROXY__" --replace_string="$port_http_proxy" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__FINAL_PATH__" --replace_string="$final_path" --target_file="$final_path/config/jupyterhub_config.py"
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
 
-# Jupyter notebook configuration
-cp -f ../conf/jupyter_notebook_config.py $final_path/config/jupyter_notebook_config.py
-
-ynh_replace_string --match_string="__ENABLE_TERMINAL__" --replace_string="$enable_terminal" --target_file="$final_path/config/jupyter_notebook_config.py"
-
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
-
-# Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum --file="$final_path/config/jupyterhub_config.py"
-ynh_store_file_checksum --file="$final_path/config/jupyter_notebook_config.py"
+ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
 #=================================================
 # GENERIC FINALIZATION
