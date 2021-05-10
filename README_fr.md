@@ -6,12 +6,12 @@
 *[Read this readme in english.](./README.md)* 
 
 > *Ce package vous permet d’installer JupyterLab rapidement et simplement sur un serveur YunoHost.  
-Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/install) pour savoir comment l’installer et en profiter.*
 
 ## Vue d’ensemble
 JupyterLab est une interface utilisateur de nouvelle génération pour le projet Jupyter offrant tous les modules de Jupyter Notebook (interpréteur Python, terminal, éditeur de texte, navigateur de fichiers, etc.) dans une interface utilisateur flexible et puissante. JupyterLab remplacera à terme Jupyter Notebook.
 
-**Version incluse :** 3.0.14
+**Version incluse :** 3.0.15
 
 ## Captures d’écran
 
