@@ -149,8 +149,9 @@ ynh_add_systemd_config
 
 # Set permissions on app files
 chmod 750 "$final_path"
-chown -R root: $final_path/
-chown -R $admin $final_path/.venv/
+chmod -R o-rwx "$final_path"
+chown -R $app:$app "$final_path"
+chown -R $admin:$app $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
