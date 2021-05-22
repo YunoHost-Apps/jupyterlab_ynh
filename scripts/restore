@@ -70,8 +70,10 @@ ynh_system_user_create --username=$app
 #=================================================
 
 # Restore permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+chown -R $admin $final_path/.venv/
 
 #=================================================
 # SPECIFIC RESTORATION
@@ -101,7 +103,7 @@ systemctl enable $app.service --quiet
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="Console environment for Python" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE

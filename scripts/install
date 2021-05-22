@@ -39,6 +39,9 @@ ynh_script_progression --message="Validating installation parameters..." --weigh
 final_path=/opt/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
+mkdir -p $final_path
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+
 # Register (book) web path
 ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
@@ -65,9 +68,6 @@ port_hub=$(ynh_find_port --port=$(($port + 1)))
 port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
 
 # Open this port
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_hub
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_http_proxy
 ynh_app_setting_set --app=$app --key=port --value=$port
 ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
 ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
@@ -86,18 +86,20 @@ python3 -m pip install pipenv
 npm install -g configurable-http-proxy
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=64
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-
-mkdir -p $final_path
-
 pushd $final_path
-
-PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
-
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
 popd
 
 #=================================================
@@ -107,14 +109,6 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=1
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC SETUP
@@ -133,11 +127,9 @@ ynh_add_systemd_config
 #=================================================
 
 mkdir -p "$final_path/config"
-
 path=${path_url%/}
 
 ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
 #=================================================
@@ -147,14 +139,16 @@ ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$f
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+chown -R $admin $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="Console environment for Python" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE

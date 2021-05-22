@@ -39,9 +39,7 @@ ynh_script_progression --message="Ensuring downward compatibility..."
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/opt/$app
-
 	mkdir -p $final_path
-
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
@@ -75,7 +73,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=2
 
-ynh_systemd_action --service_name=$app --action="stop"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -91,7 +89,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -115,14 +113,9 @@ then
 	ynh_script_progression --message="Upgrading source files..." --weight=160
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	mkdir -p $final_path
-
 	pushd $final_path
-
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
-
-	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
-
+		PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
+		ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
 	popd
 fi
 
@@ -133,11 +126,9 @@ fi
 #=================================================
 
 mkdir -p "$final_path/config"
-
 path=${path_url%/}
 
 ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
 #=================================================
@@ -157,14 +148,16 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+chown -R $admin $final_path/.venv/
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="Console environment for Python" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE

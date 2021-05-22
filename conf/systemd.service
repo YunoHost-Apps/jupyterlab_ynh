@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-User=root
+User=__APP__
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
 Environment="PATH=__NODE_PATH__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
