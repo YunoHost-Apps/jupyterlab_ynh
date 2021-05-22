@@ -140,8 +140,7 @@ ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$f
 
 # Set permissions to app files
 chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chown -R root: $final_path/
 chown -R $admin $final_path/.venv/
 
 #=================================================
