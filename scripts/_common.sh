@@ -16,10 +16,13 @@ jupyterlab_version="3.0.14"
 #=================================================
 
 function python_setup {
+	sudo chown -R $app: "$final_path"
 	pushd "$final_path"
-		sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three 2>&1
+		sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three 2>&1
 		sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
 	popd
+
+	set_permissions
 }
 
 function set_permissions {

@@ -38,7 +38,7 @@ ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
-	final_path=/opt/$app
+	final_path=/opt/yunohost/$app
 
 	mkdir -p $final_path
 
