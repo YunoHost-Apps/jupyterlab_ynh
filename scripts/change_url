@@ -115,6 +115,8 @@ path=${new_path%/}
 
 ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
 
+set_permissions
+
 #=================================================
 # GENERIC FINALISATION
 #=================================================
