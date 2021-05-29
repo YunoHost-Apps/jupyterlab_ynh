@@ -70,8 +70,7 @@ ynh_system_user_create --username=$app
 #=================================================
 
 # Restore permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+set_permissions
 
 #=================================================
 # SPECIFIC RESTORATION

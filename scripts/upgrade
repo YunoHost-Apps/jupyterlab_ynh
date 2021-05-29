@@ -117,13 +117,7 @@ then
 	# Download, check integrity, uncompress and patch the source from app.src
 	mkdir -p $final_path
 
-	pushd $final_path
-
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
-
-	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
-
-	popd
+	python_setup
 fi
 
 #=================================================
@@ -157,8 +151,7 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+set_permissions
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
