@@ -64,10 +64,6 @@ port=$(ynh_find_port --port=8080)
 port_hub=$(ynh_find_port --port=$(($port + 1)))
 port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
 
-# Open this port
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_hub
-#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port_http_proxy
 ynh_app_setting_set --app=$app --key=port --value=$port
 ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
 ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
