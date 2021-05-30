@@ -70,6 +70,14 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
+# REMOVE SUDOERS CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing sudoers configuration..." --weight=1
+
+# Remove the dedicated NGINX config
+ynh_secure_remove "/etc/sudoers.d/$app-sudoers"
+
+#=================================================
 # CLOSE A PORT
 #=================================================
 

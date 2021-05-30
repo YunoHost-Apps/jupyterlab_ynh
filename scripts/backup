@@ -56,6 +56,12 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_backup --src_path="/etc/systemd/system/$app.service"
 
 #=================================================
+# BACKUP SUDOERS
+#=================================================
+
+ynh_backup --src_path="/etc/sudoers.d/$app-sudoers"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

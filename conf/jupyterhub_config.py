@@ -469,7 +469,7 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #    - default: jupyterhub.spawner.LocalProcessSpawner
 #    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #    - localprocess: jupyterhub.spawner.LocalProcessSpawner
-#c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
+c.JupyterHub.spawner_class = 'sudospawner.SudoSpawner'
 
 ## Path to SSL certificate file for the public facing interface of the proxy
 #  

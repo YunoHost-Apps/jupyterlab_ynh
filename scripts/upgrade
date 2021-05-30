@@ -126,13 +126,7 @@ fi
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-mkdir -p "$final_path/config"
-
-path=${path_url%/}
-
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
+add_configs
 
 #=================================================
 # SETUP SYSTEMD
