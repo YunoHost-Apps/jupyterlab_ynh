@@ -51,6 +51,15 @@
                     "fr": "Activer le terminal dans le lab ?"
                 },
                 "default": true
+            },
+            {
+                "name": "enable_extensions",
+                "type": "boolean",
+                "ask": {
+                    "en": "Allow users to install extensions?",
+                    "fr": "Permettre aux utilisateurs d'installer des extensions ?"
+                },
+                "default": true
             }
         ]
     }

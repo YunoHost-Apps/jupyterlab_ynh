@@ -28,6 +28,7 @@ path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 admin=$YNH_APP_ARG_ADMIN
 enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
+enable_extensions=$YNH_APP_ARG_ENABLE_EXTENSIONS
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -51,6 +52,7 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
+ynh_app_setting_set --app=$app --key=enable_extensions --value=$enable_extensions
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -136,6 +138,16 @@ add_configs
 set_permissions
 
 #=================================================
+# BUILD USER LABS
+#=================================================
+ynh_script_progression --message="Building Jupyter lab for each user..." --weight=10
+
+# Set permissions to app files
+if [ $enable_extensions -eq 1 ]; then
+	build_local_labs
+fi
+
+#=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
@@ -155,8 +167,7 @@ ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub
 ynh_script_progression --message="Configuring permissions..." --weight=4
 
 # Make app public if necessary
-if [ $is_public -eq 1 ]
-then
+if [ $is_public -eq 1 ]; then
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 

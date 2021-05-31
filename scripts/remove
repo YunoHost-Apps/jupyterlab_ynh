@@ -14,13 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+load_settings
 
 #=================================================
 # STANDARD REMOVE

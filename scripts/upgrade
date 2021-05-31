@@ -14,16 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=3
 
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
+load_settings
 
 #=================================================
 # CHECK VERSION
@@ -35,6 +26,12 @@ upgrade_type=$(ynh_check_app_version_changed)
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
+
+if [ -z "$enable_extensions" ]; then
+	enable_extensions=0
+	ynh_app_setting_set --app=$app --key=enable_extensions --value=$enable_extensions
+fi
+
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
@@ -146,6 +143,16 @@ ynh_add_systemd_config
 
 # Set permissions on app files
 set_permissions
+
+#=================================================
+# BUILD USER LABS
+#=================================================
+ynh_script_progression --message="Building Jupyter lab for each user..." --weight=10
+
+# Set permissions to app files
+if [ $enable_extensions -eq 1 ]; then
+	build_local_labs
+fi
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
