@@ -98,9 +98,17 @@ ynh_script_progression --message="Setting up source files..." --weight=64
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
-mkdir -p $final_path
+# Set permissions to app files
+mkdir -p "$final_path/.venv"
+chown -R $app:$app "$final_path"
+chmod -R g=u,g-w,o-rwx "$final_path"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
+setfacl -n -m g:$app.main:x "$final_path"
 
-python_setup
+pushd "$final_path"
+	sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner --three 2>&1
+	sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
+popd
 
 #=================================================
 # NGINX CONFIGURATION
@@ -126,7 +134,13 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-add_configs
+mkdir -p "$final_path/config"
+path="${path_url%/}"
+
+ynh_add_config --template="jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$final_path/config/jupyter_server_config.py"
+ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
+ynh_add_config --template="sudospawner-singleuser" --destination="$final_path/.venv/bin/sudospawner-singleuser"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -135,16 +149,26 @@ add_configs
 #=================================================
 
 # Set permissions to app files
-set_permissions
+chmod 550 "$final_path/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$final_path"
+chmod -R g=u,g-w,o-rwx "$final_path"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
+setfacl -n -m g:$app.main:x "$final_path"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
 
 #=================================================
 # BUILD USER LABS
 #=================================================
 ynh_script_progression --message="Building Jupyter lab for each user..." --weight=10
 
-# Set permissions to app files
 if [ $enable_extensions -eq 1 ]; then
-	build_local_labs
+	ynh_use_nodejs
+	for user in $(ynh_user_list); do
+		JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
+		node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
+		sudo -u $user env "PATH=$node_path" "$final_path/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+	done
 fi
 
 #=================================================
