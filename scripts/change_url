@@ -118,6 +118,7 @@ path=${new_path%/}
 
 mkdir -p "$final_path/config"
 
+ynh_use_nodejs
 ynh_add_config --template="jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
 ynh_add_config --template="jupyter_server_config.py" --destination="$final_path/config/jupyter_server_config.py"
 ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
