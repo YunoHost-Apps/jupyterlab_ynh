@@ -177,7 +177,7 @@ chmod 440 "/etc/sudoers.d/$app-sudoers"
 #=================================================
 # BUILD USER LABS
 #=================================================
-ynh_script_progression --message="Building Jupyter lab for each user..." --weight=10
+ynh_script_progression --message="Building JupyterLab for each user..." --weight=10
 
 if [ $enable_extensions -eq 1 ]; then
 	ynh_use_nodejs
