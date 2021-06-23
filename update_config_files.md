@@ -6,7 +6,7 @@ Install the new version of the app with:
 sudo yunohost app install https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing  
 ```
 
-Navigate to the installation path (`/opt/jupyterlab` by default), and run :
+Navigate to the installation path (`/opt/yunohost/jupyterlab` by default), and run :
 
 ```bash
 pipenv shell

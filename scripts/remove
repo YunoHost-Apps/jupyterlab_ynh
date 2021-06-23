@@ -16,11 +16,15 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+domain="$(ynh_app_setting_get --app=$app --key=domain)"
+path_url="$(ynh_app_setting_get --app=$app --key=path)"
+admin="$(ynh_app_setting_get --app=$app --key=admin)"
+final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
+port="$(ynh_app_setting_get --app=$app --key=port)"
+port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # STANDARD REMOVE
@@ -68,6 +72,36 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
+
+#=================================================
+# REMOVE SUDOERS CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing sudoers configuration..." --weight=1
+
+# Remove the dedicated NGINX config
+ynh_secure_remove "/etc/sudoers.d/$app-sudoers"
+
+#=================================================
+# CLOSE A PORT
+#=================================================
+
+if yunohost firewall list | grep -q "\- $port$"
+then
+	ynh_script_progression --message="Closing port $port..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port
+fi
+
+if yunohost firewall list | grep -q "\- $port_hub$"
+then
+	ynh_script_progression --message="Closing port $port_hub..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port_hub
+fi
+
+if yunohost firewall list | grep -q "\- $port_http_proxy$"
+then
+	ynh_script_progression --message="Closing port $port_http_proxy..."
+	ynh_exec_warn_less yunohost firewall disallow TCP $port_http_proxy
+fi
 
 #=================================================
 # REMOVE DEDICATED USER

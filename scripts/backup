@@ -27,8 +27,15 @@ ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-domain=$(ynh_app_setting_get --app=$app --key=domain)
+domain="$(ynh_app_setting_get --app=$app --key=domain)"
+path_url="$(ynh_app_setting_get --app=$app --key=path)"
+admin="$(ynh_app_setting_get --app=$app --key=admin)"
+final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
+port="$(ynh_app_setting_get --app=$app --key=port)"
+port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
@@ -54,6 +61,12 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 
 ynh_backup --src_path="/etc/systemd/system/$app.service"
+
+#=================================================
+# BACKUP SUDOERS
+#=================================================
+
+ynh_backup --src_path="/etc/sudoers.d/$app-sudoers"
 
 #=================================================
 # END OF SCRIPT

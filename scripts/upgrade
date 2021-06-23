@@ -16,14 +16,15 @@ ynh_script_progression --message="Loading installation settings..." --weight=3
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
+domain="$(ynh_app_setting_get --app=$app --key=domain)"
+path_url="$(ynh_app_setting_get --app=$app --key=path)"
+admin="$(ynh_app_setting_get --app=$app --key=admin)"
+final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
+port="$(ynh_app_setting_get --app=$app --key=port)"
+port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # CHECK VERSION
@@ -36,9 +37,15 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
 
+if [ -z "$enable_extensions" ]; then
+	enable_extensions=0
+	ynh_app_setting_set --app=$app --key=enable_extensions --value=$enable_extensions
+fi
+
+
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
-	final_path=/opt/$app
+	final_path=/opt/yunohost/$app
 
 	mkdir -p $final_path
 
@@ -114,15 +121,16 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=160
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	mkdir -p $final_path
+	# Set permissions to app files
+	mkdir -p "$final_path/.venv"
+	chown -R $app:$app "$final_path"
+	chmod -R g=u,g-w,o-rwx "$final_path"
+	setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
+	setfacl -n -m g:$app.main:x "$final_path"
 
-	pushd $final_path
-
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
-
-	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
-
+	pushd "$final_path"
+		sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner --three 2>&1
+		sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
 	popd
 fi
 
@@ -133,12 +141,12 @@ fi
 #=================================================
 
 mkdir -p "$final_path/config"
+path="${path_url%/}"
 
-path=${path_url%/}
-
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
+ynh_add_config --template="jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$final_path/config/jupyter_server_config.py"
+ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
+ynh_add_config --template="sudospawner-singleuser" --destination="$final_path/.venv/bin/sudospawner-singleuser"
 
 #=================================================
 # SETUP SYSTEMD
@@ -157,8 +165,28 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chmod 550 "$final_path/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$final_path"
+chmod -R g=u,g-w,o-rwx "$final_path"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
+setfacl -n -m g:$app.main:x "$final_path"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
+
+
+#=================================================
+# BUILD USER LABS
+#=================================================
+ynh_script_progression --message="Building JupyterLab for each user..." --weight=10
+
+if [ $enable_extensions -eq 1 ]; then
+	ynh_use_nodejs
+	for user in $(ynh_user_list); do
+		JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
+		node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
+		sudo -u $user env "PATH=$node_path" "$final_path/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+	done
+fi
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL

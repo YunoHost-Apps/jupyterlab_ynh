@@ -19,19 +19,22 @@ old_path=$YNH_APP_OLD_PATH
 new_domain=$YNH_APP_NEW_DOMAIN
 new_path=$YNH_APP_NEW_PATH
 
-app=$YNH_APP_INSTANCE_NAME
-
 #=================================================
 # LOAD SETTINGS
 #=================================================
 ynh_script_progression --message="Loading installation settings..." 
 
-# Needed for helper "ynh_add_nginx_config"
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
+app=$YNH_APP_INSTANCE_NAME
+
+domain="$(ynh_app_setting_get --app=$app --key=domain)"
+path_url="$(ynh_app_setting_get --app=$app --key=path)"
+admin="$(ynh_app_setting_get --app=$app --key=admin)"
+final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
+port="$(ynh_app_setting_get --app=$app --key=port)"
+port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -113,7 +116,21 @@ fi
 domain=$new_domain
 path=${new_path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+mkdir -p "$final_path/config"
+
+ynh_use_nodejs
+ynh_add_config --template="jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$final_path/config/jupyter_server_config.py"
+ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
+ynh_add_config --template="sudospawner-singleuser" --destination="$final_path/.venv/bin/sudospawner-singleuser"
+
+chmod 550 "$final_path/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$final_path"
+chmod -R g=u,g-w,o-rwx "$final_path"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
+setfacl -n -m g:$app.main:x "$final_path"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
 
 #=================================================
 # GENERIC FINALISATION

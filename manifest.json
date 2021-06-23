@@ -14,7 +14,7 @@
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.2.4"
     },
     "multi_instance": true,
     "services": [
@@ -49,6 +49,15 @@
                 "ask": {
                     "en": "Enable terminal in the lab?",
                     "fr": "Activer le terminal dans le lab ?"
+                },
+                "default": true
+            },
+            {
+                "name": "enable_extensions",
+                "type": "boolean",
+                "ask": {
+                    "en": "Allow users to install extensions?",
+                    "fr": "Permettre aux utilisateurs d'installer des extensions ?"
                 },
                 "default": true
             }
