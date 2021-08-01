@@ -4,6 +4,8 @@
 		path="/jupyterlab"
 		admin="john"
 		is_public=1
+		enable_terminal=1
+		enable_extensions=1
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=1
