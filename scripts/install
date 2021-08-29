@@ -102,8 +102,8 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 mkdir -p "$final_path/.venv"
 chown -R $app:$app "$final_path"
 chmod -R g=u,g-w,o-rwx "$final_path"
-setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
-setfacl -n -m g:$app.main:x "$final_path"
+setfacl -nR -m g:$app:rx -m d:g:$app:rx "$final_path/.venv"
+setfacl -n -m g:$app:x "$final_path"
 
 pushd "$final_path"
 	sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner --three 2>&1
