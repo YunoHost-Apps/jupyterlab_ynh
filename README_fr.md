@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Console de code pour exécuter du code Python de manière interactive
 
-**Version incluse :** 3.1.9~ynh1
+**Version incluse :** 3.1.10~ynh1
 
 **Démo :** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
