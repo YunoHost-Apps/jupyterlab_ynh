@@ -82,6 +82,14 @@ python3 -m pip install pipenv
 npm install -g configurable-http-proxy
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=64
@@ -103,14 +111,6 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=1
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC SETUP
@@ -143,8 +143,12 @@ ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$f
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+#chown -R root: $final_path/
+#chown -R $admin: $final_path/.venv/
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
