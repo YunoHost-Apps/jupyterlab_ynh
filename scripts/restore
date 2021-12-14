@@ -44,15 +44,9 @@ test ! -d $final_path || ynh_die --message="There is already a directory: $final
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Restoring the NGINX configuration..." --weight=1
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
-
-#=================================================
-# RESTORE THE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Restoring the app main directory..." --weight=5
-
-ynh_restore_file --origin_path="$final_path"
 
 #=================================================
 # RECREATE THE DEDICATED USER
@@ -60,7 +54,14 @@ ynh_restore_file --origin_path="$final_path"
 ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
 
 # Create the dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+ynh_script_progression --message="Restoring the app main directory..." --weight=5
+
+ynh_restore_file --origin_path="$final_path"
 
 #=================================================
 # RESTORE USER RIGHTS
@@ -98,7 +99,7 @@ systemctl enable $app.service --quiet
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="JupyterLab: Python console environment" --log="$app"
 
 #=================================================
 # START SYSTEMD SERVICE

@@ -99,9 +99,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 mkdir -p $final_path
 
 pushd $final_path
-
-PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR --three
-
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR --three
 popd
 
 #=================================================
@@ -109,7 +107,7 @@ popd
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
@@ -150,7 +148,7 @@ chown -R $admin: $final_path/.venv/
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="JupyterLab: Python console environment" --log="$app"
 
 #=================================================
 # START SYSTEMD SERVICE
