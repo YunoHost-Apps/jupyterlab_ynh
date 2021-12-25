@@ -15,7 +15,7 @@ JupyterLab est une interface utilisateur de nouvelle génération pour le projet
 
 **Version incluse :** 3.2.5~ynh1
 
-**Démo :** https://demo.example.com
+
 
 ## Captures d'écran
 
