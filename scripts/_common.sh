@@ -7,9 +7,9 @@
 # dependencies used by the app
 pkg_dependencies="python3-dev python3-pip"
 
-nodejs_version="15"
+nodejs_version="16"
 
-jupyterlab_version="3.2.6"
+jupyterlab_version="4.0.0a19"
 
 #=================================================
 # PERSONAL HELPERS
