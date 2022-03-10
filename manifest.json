@@ -8,13 +8,20 @@
     },
     "version": "3.0.16~ynh1",
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
+    "upstream": {
+        "license": "BSD-3-Clause",
+        "website": "https://jupyterlab.readthedocs.io/en/stable/",
+        "demo": "https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo",
+        "admindoc": "https://jupyterlab.readthedocs.io/en/stable/",
+        "code": "https://github.com/jupyterhub/jupyterhub"
+    },
     "license": "BSD-3-Clause",
     "maintainer": {
         "name": "kay0u",
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
@@ -24,8 +31,7 @@
         "install": [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "path",
@@ -34,14 +40,13 @@
                 "default": "/jupyterlab"
             },
             {
-                "name": "admin",
-                "type": "user",
-                "example": "johndoe"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
+            },
+            {
+                "name": "admin",
+                "type": "user"
             },
             {
                 "name": "enable_terminal",

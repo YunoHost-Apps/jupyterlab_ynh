@@ -17,21 +17,18 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
 # STANDARD REMOVE
 #=================================================
-# REMOVE SERVICE FROM ADMIN PANEL
+# REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
 
-# Remove a service from the admin panel, added by `yunohost service add`
+# Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
 if ynh_exec_warn_less yunohost service status $app >/dev/null
 then
-	ynh_script_progression --message="Removing $app service..." --weight=2
+	ynh_script_progression --message="Removing $app service integration..."--weight=2
 	yunohost service remove $app
 fi
 
@@ -42,16 +39,6 @@ ynh_script_progression --message="Stopping and removing the systemd service..." 
 
 # Remove the dedicated systemd config
 ynh_remove_systemd_config
-
-#=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=4
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
-
-ynh_remove_nodejs
 
 #=================================================
 # REMOVE APP MAIN DIR
@@ -70,12 +57,13 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE DEDICATED USER
+# REMOVE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --weight=1
+ynh_script_progression --message="Removing dependencies..." --weight=4
 
-# Delete a system user
-ynh_system_user_delete --username=$app
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
+ynh_remove_nodejs
 
 #=================================================
 # END OF SCRIPT
