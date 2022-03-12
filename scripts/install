@@ -59,13 +59,14 @@ ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
 #=================================================
 ynh_script_progression --message="Finding an available port..." --weight=1
 
-# Find a free port
+# Find an available port
 port=$(ynh_find_port --port=8080)
-port_hub=$(ynh_find_port --port=$(($port + 1)))
-port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
-
 ynh_app_setting_set --app=$app --key=port --value=$port
+
+port_hub=$(ynh_find_port --port=$(($port + 1)))
 ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
+
+port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
 ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
 
 #=================================================
@@ -74,83 +75,65 @@ ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
 ynh_script_progression --message="Installing dependencies..." --weight=23
 
 ynh_install_app_dependencies $pkg_dependencies
-
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-
+ynh_use_nodejs
+$ynh_npm install -g configurable-http-proxy
 python3 -m pip install pipenv
-
-npm install -g configurable-http-proxy
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-ynh_script_progression --message="Setting up source files..." --weight=64
-
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-
-mkdir -p $final_path
-
-pushd $final_path
-
-PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
-
-popd
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=1
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-# SETUP SYSTEMD
+# BUILD APP
 #=================================================
-ynh_script_progression --message="Configuring a systemd service..." --weight=3
+ynh_script_progression --message="Building app..."
 
-# Create a dedicated systemd config
-ynh_replace_string --match_string="__NODE_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+mkdir -p "$final_path"
 
-ynh_add_systemd_config
+pushd $final_path
+
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
+popd
 
 #=================================================
-# MODIFY A CONFIG FILE
+# ADD A CONFIGURATION
 #=================================================
+ynh_script_progression --message="Adding a configuration file..."
 
 mkdir -p "$final_path/config"
 
 path=${path_url%/}
 
 ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
 chown -R root: $final_path/
 chown -R $admin: $final_path/.venv/
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# SETUP SYSTEMD
 #=================================================
+ynh_script_progression --message="Configuring a systemd service..." --weight=3
 
-yunohost service add $app --description="$app daemon" --log="$app"
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add $app --description="$app daemon"
 
 #=================================================
 # START SYSTEMD SERVICE

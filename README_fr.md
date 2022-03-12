@@ -1,55 +1,34 @@
 # JupyterLab pour YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab) ![](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)  
+[![Niveau d'intégration](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab) ![](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)  
 [![Installer JupyterLab avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=jupyterlab)
 
-*[Read this readme in english.](./README.md)* 
+*[Read this readme in english.](./README.md)*
+*[Lire ce readme en français.](./README_fr.md)*
 
-> *Ce package vous permet d’installer JupyterLab rapidement et simplement sur un serveur YunoHost.  
-Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/install) pour savoir comment l’installer et en profiter.*
+> *Ce package vous permet d'installer JupyterLab rapidement et simplement sur un serveur YunoHost.
+Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
-## Vue d’ensemble
-JupyterLab est une interface utilisateur de nouvelle génération pour le projet Jupyter offrant tous les modules de Jupyter Notebook (interpréteur Python, terminal, éditeur de texte, navigateur de fichiers, etc.) dans une interface utilisateur flexible et puissante. JupyterLab remplacera à terme Jupyter Notebook.
+## Vue d'ensemble
 
-**Version incluse :** 3.0.16
+JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
-## Captures d’écran
 
-![](https://raw.githubusercontent.com/jupyterlab/jupyterlab/3e3a2c9e295703ff6d441589423e284cc6d5c245/docs/source/images/jupyterlab.png)
+**Version incluse :** 3.0.16~ynh2
 
-## Démo
+**Démo :** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
-* [Démo sur Binder](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo)
+## Captures d'écran
 
-## Configuration
+![](./doc/screenshots/jupyterlab.png)
 
-Comment configurer cette application : via le panneau d'administration, un fichier brut en SSH.
+## Documentations et ressources
 
-## Documentation
-
-* Documentation officielle : https://jupyterlab.readthedocs.io/en/stable/
-* Documentation YunoHost : https://yunohost.org/fr/app_jupyterlab
-
-## Caractéristiques spécifiques YunoHost
-
-#### Support multi-utilisateurs
-
-* L’authentification LDAP est-elle prise en charge ? **Oui**
-* L’application peut-elle être utilisée par plusieurs utilisateurs ? **Oui**
-
-#### Architectures supportées
-
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/jupyterlab.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/jupyterlab.svg)](https://ci-apps-arm.yunohost.org/ci/apps/jupyterlab/)
-
-## Liens
-
-* Signaler un bug : https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
-* Site de l’application : https://jupyter.org
-* Dépôt de l’application principale : https://github.com/jupyterhub/jupyterhub
-* Site web YunoHost : https://yunohost.org/
-
----
+* Site officiel de l'app : https://jupyterlab.readthedocs.io/en/stable/
+* Documentation officielle de l'admin : https://jupyterlab.readthedocs.io/en/stable/
+* Dépôt de code officiel de l'app : https://github.com/jupyterhub/jupyterhub
+* Documentation YunoHost pour cette app : https://yunohost.org/app_jupyterlab
+* Signaler un bug : https://github.com/YunoHost-Apps/jupyterlab_ynh/issues
 
 ## Informations pour les développeurs
 
@@ -61,3 +40,5 @@ sudo yunohost app install https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/t
 ou
 sudo yunohost app upgrade jupyterlab -u https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing --debug
 ```
+
+**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps

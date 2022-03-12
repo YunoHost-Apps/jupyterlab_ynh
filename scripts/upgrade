@@ -28,8 +28,33 @@ enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	ynh_clean_check_starting
+	# Restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a systemd service..." --weight=2
+
+ynh_systemd_action --service_name=$app --action="stop"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -53,45 +78,12 @@ if ynh_legacy_permissions_exists; then
 fi
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	ynh_clean_check_starting
-
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-# STOP SYSTEMD SERVICE
-#=================================================
-ynh_script_progression --message="Stopping a systemd service..." --weight=2
-
-ynh_systemd_action --service_name=$app --action="stop"
-
-#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -99,38 +91,30 @@ ynh_system_user_create --username=$app
 ynh_script_progression --message="Upgrading dependencies..." --weight=83
 
 ynh_install_app_dependencies $pkg_dependencies
-
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-
-npm install -g configurable-http-proxy
-
+ynh_use_nodejs
+$ynh_npm install -g configurable-http-proxy
 python3 -m pip install pipenv
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Upgrading source files..." --weight=160
-
-	# Download, check integrity, uncompress and patch the source from app.src
-	mkdir -p $final_path
-
-	pushd $final_path
-
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
-
-	ynh_exec_warn_less python3 -m pipenv run jupyterhub upgrade-db
-
-	popd
-fi
 
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# STORE THE CONFIG FILE CHECKSUM
+# BUILD APP
 #=================================================
+
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Building app..." --weight=160
+
+	pushd $final_path
+		PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
+	popd
+fi
+
+#=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a configuration file..."
 
 mkdir -p "$final_path/config"
 
@@ -140,29 +124,23 @@ ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_p
 
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
+chown -R root: $final_path/
+chown -R $admin: $final_path/.venv/
+
 #=================================================
 # SETUP SYSTEMD
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
-ynh_replace_string --match_string="__NODE_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
-
 ynh_add_systemd_config
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-# SECURE FILES AND DIRECTORIES
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-
-# Set permissions on app files
-chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
-
-#=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
-#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon" --log="$app"
 
@@ -171,7 +149,7 @@ yunohost service add $app --description="$app daemon" --log="$app"
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=start --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
 # RELOAD NGINX
