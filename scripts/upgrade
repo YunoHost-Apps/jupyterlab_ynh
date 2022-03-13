@@ -142,7 +142,7 @@ ynh_add_systemd_config
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="$app daemon"
 
 #=================================================
 # START SYSTEMD SERVICE
