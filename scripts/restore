@@ -6,7 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-#Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
+# Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
@@ -23,22 +23,20 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading settings..." --weight=1
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
-admin=$(ynh_app_setting_get --app=$app --key=admin)
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
 #=================================================
 ynh_script_progression --message="Validating restoration parameters..." --weight=1
 
-ynh_webpath_available --domain=$domain --path_url=$path_url \
-	|| ynh_die --message="Path not available: ${domain}${path_url}"
 test ! -d $final_path \
 	|| ynh_die --message="There is already a directory: $final_path "
 
@@ -47,6 +45,7 @@ test ! -d $final_path \
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Restoring the NGINX web server configuration..."
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
@@ -57,19 +56,6 @@ ynh_script_progression --message="Restoring the app main directory..." --weight=
 
 ynh_restore_file --origin_path="$final_path"
 
-#=================================================
-# RECREATE THE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
-
-# Create the dedicated user (if not existing)
-ynh_system_user_create --username=$app
-
-#=================================================
-# RESTORE USER RIGHTS
-#=================================================
-
-# Restore permissions on app files
 chown -R root: $final_path/
 chown -R $admin: $final_path/.venv/
 
@@ -82,12 +68,10 @@ ynh_script_progression --message="Reinstalling dependencies..." --weight=75
 
 # Define and install dependencies
 ynh_install_app_dependencies $pkg_dependencies
-
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-
+ynh_use_nodejs
+$ynh_npm install -g configurable-http-proxy
 python3 -m pip install pipenv
-
-npm install -g configurable-http-proxy
 
 #=================================================
 # RESTORE SYSTEMD
@@ -98,17 +82,18 @@ ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
 systemctl enable $app.service --quiet
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="$app daemon" --log="$app"
+yunohost service add $app --description="$app daemon"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=5
 
-ynh_systemd_action --service_name=$app --action=start --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
 # GENERIC FINALIZATION
