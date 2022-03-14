@@ -6,7 +6,7 @@
         "en": "Code console environment for running Python code interactively.",
         "fr": "Console de code pour exécuter du code Python de manière interactive."
     },
-    "version": "3.0.16~ynh2",
+    "version": "3.3.1~ynh1",
     "url": "https://jupyterlab.readthedocs.io/en/stable/",
     "upstream": {
         "license": "BSD-3-Clause",
