@@ -48,6 +48,10 @@
                 "default": true
             },
             {
+                "name": "admin",
+                "type": "user"
+            },
+            {
                 "name": "enable_terminal",
                 "type": "boolean",
                 "ask": {
