@@ -107,7 +107,8 @@ then
 	ynh_script_progression --message="Building app..." --weight=160
 
 	pushd $final_path
-		PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
+		mkdir -p .venv
+		PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq
 	popd
 fi
 
