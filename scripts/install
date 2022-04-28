@@ -99,8 +99,8 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 mkdir -p "$final_path"
 
 pushd $final_path
-
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true  ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
+	mkdir -p .venv
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq --three
 popd
 
 #=================================================
