@@ -77,7 +77,8 @@ ynh_script_progression --message="Installing dependencies..." --weight=23
 ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
-$ynh_npm install -g configurable-http-proxy
+#$ynh_npm install -g npm@latest
+$ynh_npm install -g npm@latest configurable-http-proxy
 python3 -m pip install pipenv
 
 npm install -g configurable-http-proxy
