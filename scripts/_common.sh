@@ -7,7 +7,7 @@
 # dependencies used by the app
 pkg_dependencies="python3-dev python3-pip"
 
-nodejs_version="16"
+nodejs_version="18"
 
 jupyterlab_version="4.0.0a24"
 
