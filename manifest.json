@@ -12,7 +12,8 @@
         "license": "BSD-3-Clause",
         "website": "https://jupyter.org",
         "admindoc": "https://jupyterlab.readthedocs.io/en/stable/",
-        "code": "https://github.com/jupyterhub/jupyterhub"
+        "code": "https://github.com/jupyterhub/jupyterhub",
+        "cpe": "cpe:2.3:a:jupyter:nbdime-jupyterlab"
     },
     "license": "BSD-3-Clause",
     "maintainer": {

@@ -21,6 +21,7 @@ JupyterLab is the next-generation user interface for Project Jupyter offering al
 
 **Shipped version:** 4.0.0~ynh5
 
+
 ## Screenshots
 
 ![Screenshot of JupyterLab](./doc/screenshots/jupyterlab.png)
