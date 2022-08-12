@@ -28,7 +28,7 @@ JupyterLab is the next-generation user interface for Project Jupyter offering al
 
 ## Documentation and resources
 
-* Official app website: <https://jupyterlab.readthedocs.io/en/stable/>
+* Official app website: <https://jupyter.org>
 * Official admin documentation: <https://jupyterlab.readthedocs.io/en/stable/>
 * Upstream app code repository: <https://github.com/jupyterhub/jupyterhub>
 * YunoHost documentation for this app: <https://yunohost.org/app_jupyterlab>
