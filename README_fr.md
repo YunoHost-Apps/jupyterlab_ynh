@@ -26,7 +26,7 @@ JupyterLab est une interface utilisateur de nouvelle génération pour le projet
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://jupyter.org>
+* Site officiel de l'app : <https://jupyterlab.readthedocs.io/en/stable/>
 * Documentation officielle de l'admin : <https://jupyterlab.readthedocs.io/en/stable/>
 * Dépôt de code officiel de l'app : <https://github.com/jupyterhub/jupyterhub>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_jupyterlab>
