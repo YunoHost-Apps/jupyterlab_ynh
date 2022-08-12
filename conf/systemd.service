@@ -5,10 +5,9 @@ After=syslog.target network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=__FINALPATH__/
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
-WorkingDirectory=__FINALPATH__
+WorkingDirectory=__FINALPATH__/
 Environment="__YNH_NODE_LOAD_PATH__"
 ExecStart=/usr/local/bin/pipenv run jupyterhub -f __FINALPATH__/config/jupyterhub_config.py
 Restart=always
