@@ -7,10 +7,10 @@
         "fr": "Console de code pour exécuter du code Python de manière interactive."
     },
     "version": "3.4.5~ynh1",
-    "url": "https://jupyterlab.readthedocs.io/en/stable/",
+    "url": "https://jupyter.org",
     "upstream": {
         "license": "BSD-3-Clause",
-        "website": "https://jupyterlab.readthedocs.io/en/stable/",
+        "website": "https://jupyter.org",
         "demo": "https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo",
         "admindoc": "https://jupyterlab.readthedocs.io/en/stable/",
         "code": "https://github.com/jupyterhub/jupyterhub",
