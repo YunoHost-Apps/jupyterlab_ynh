@@ -6,11 +6,11 @@
         "en": "Code console environment for running Python code interactively.",
         "fr": "Console de code pour exécuter du code Python de manière interactive."
     },
-    "version": "3.4.2~ynh1",
-    "url": "https://jupyterlab.readthedocs.io/en/stable/",
+    "version": "3.4.5~ynh1",
+    "url": "https://jupyter.org",
     "upstream": {
         "license": "BSD-3-Clause",
-        "website": "https://jupyterlab.readthedocs.io/en/stable/",
+        "website": "https://jupyter.org",
         "demo": "https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo",
         "admindoc": "https://jupyterlab.readthedocs.io/en/stable/",
         "code": "https://github.com/jupyterhub/jupyterhub",
@@ -22,7 +22,7 @@
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 4.3.0"
+        "yunohost": ">= 11.0.9"
     },
     "multi_instance": true,
     "services": [
