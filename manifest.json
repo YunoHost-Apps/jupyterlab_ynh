@@ -3,8 +3,8 @@
     "id": "jupyterlab",
     "packaging_format": 1,
     "description": {
-        "en": "Code console environment for running Python code interactively.",
-        "fr": "Console de code pour exécuter du code Python de manière interactive."
+        "en": "Code console environment for running Python code interactively",
+        "fr": "Console de code pour exécuter du code Python de manière interactive"
     },
     "version": "3.4.7~ynh1",
     "url": "https://jupyter.org",
