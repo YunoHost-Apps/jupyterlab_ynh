@@ -20,7 +20,6 @@ JupyterLab is the next-generation user interface for Project Jupyter offering al
 
 **Shipped version:** 3.4.7~ynh1
 
-
 **Demo:** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
 ## Screenshots
