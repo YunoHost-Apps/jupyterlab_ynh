@@ -18,13 +18,46 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
 
-**Shipped version:** 3.5.0~ynh1
+**Shipped version:** 3.5.2~ynh1
 
 **Demo:** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
 ## Screenshots
 
 ![Screenshot of JupyterLab](./doc/screenshots/jupyterlab.png)
+
+## Disclaimers / important information
+
+## Updating configuration files
+
+Install the new version of the app with:
+
+```bash
+sudo yunohost app install https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing  
+```
+
+Navigate to the installation path (`/opt/jupyterlab` by default), and run :
+
+```bash
+pipenv shell
+```
+
+You are now in the virtual environment of jupyterlab. You can execute these two commands:
+
+- To generate the `jupyterhub_config.py` file:
+
+```bash
+jupyterhub --generate-config
+```
+
+- To generate the `jupyter_notebook_config.py` file:
+
+```bash
+jupyter notebook --generate-config
+cp $HOME/.jupyter/jupyter_notebook_config.py ./
+```
+
+You can now update the old template files with the new one.
 
 ## Documentation and resources
 
