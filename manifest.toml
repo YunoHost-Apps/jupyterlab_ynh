@@ -17,7 +17,7 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 11.1.8"
+yunohost = ">= 11.1.9"
 architectures = "all"
 multi_instance = true
 ldap = true

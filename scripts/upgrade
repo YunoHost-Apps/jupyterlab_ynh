@@ -42,7 +42,7 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=83
+ynh_script_progression --message="Upgrading dependencies..." --weight=20
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
@@ -57,7 +57,7 @@ python3 -m pip install pipenv
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Building app..." --weight=160
+	ynh_script_progression --message="Building app..." --weight=60
 
 	pushd $install_dir
 		mkdir -p .venv
