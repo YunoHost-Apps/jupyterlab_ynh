@@ -6,5 +6,5 @@ test_format = 1.0
     # Commits to test upgrade from
     # -------------------------------
 
-    test_upgrade_from.511bcaf0.name = "Upgrade from 3.3.2"
+    test_upgrade_from.68367353.name = "Upgrade from 3.6.1~ynh2"
     
