@@ -3,12 +3,6 @@ test_format = 1.0
 [default]
 
     # -------------------------------
-    # Default args to use for install
-    # -------------------------------
-
-    args.enable_terminal = true
-
-    # -------------------------------
     # Commits to test upgrade from
     # -------------------------------
 
