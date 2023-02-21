@@ -1,0 +1,68 @@
+packaging_format = 2
+
+id = "jupyterlab"
+name = "JupyterLab"
+description.en = "Code console environment for running Python code interactively"
+description.fr = "Console de code pour exécuter du code Python de manière interactive"
+
+version = "3.6.1~ynh2"
+
+maintainers = ["kay0u"]
+
+[upstream]
+license = "BSD-3-Clause"
+website = "https://jupyter.org"
+demo = "https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo"
+admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
+code = "https://github.com/jupyterhub/jupyterhub"
+
+[integration]
+yunohost = ">= 11.1.9"
+architectures = "all"
+multi_instance = true
+ldap = true
+sso = false
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/jupyterlab"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.admin]
+    type = "user"
+
+    [install.enable_terminal]
+    ask.en = "Enable terminal in the lab?"
+    ask.fr = "Activer le terminal dans le lab ?"
+    type = "boolean"
+    default = true
+
+[resources]
+    [resources.ports]
+    main.default = 8080
+    hub.default = 8081
+    http_proxy.default = 8082
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = "python3-dev python3-pip"
+
+    extras.yarn.repo = "deb https://dl.yarnpkg.com/debian/ stable main"
+    extras.yarn.key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
+    extras.yarn.packages = "yarn"
