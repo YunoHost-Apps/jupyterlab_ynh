@@ -49,7 +49,7 @@ setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
 setfacl -n -m g:$app.main:x "$install_dir"
 
 pushd "$install_dir"
-	sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner --three 2>&1
+	sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner 2>&1
 	sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
 popd
 
