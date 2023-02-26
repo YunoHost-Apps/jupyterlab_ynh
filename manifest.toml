@@ -5,7 +5,7 @@ name = "JupyterLab"
 description.en = "Code console environment for running Python code interactively"
 description.fr = "Console de code pour exécuter du code Python de manière interactive"
 
-version = "3.6.1~ynh2"
+version = "3.6.1~ynh3"
 
 maintainers = ["kay0u"]
 
@@ -17,13 +17,13 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 11.1.9"
+yunohost = ">= 11.1.11"
 architectures = "all"
 multi_instance = true
 ldap = true
 sso = false
 disk = "50M"
-ram.build = "50M"
+ram.build = "950M"
 ram.runtime = "50M"
 
 [install]
