@@ -34,7 +34,21 @@ ynh_change_url_nginx_config
 domain=$new_domain
 path=${new_path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+mkdir -p "$install_dir/config"
+
+ynh_use_nodejs
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$install_dir/config/jupyter_server_config.py"
+ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
+ynh_add_config --template="sudospawner-singleuser" --destination="$install_dir/.venv/bin/sudospawner-singleuser"
+
+chmod 550 "$install_dir/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
 
 #=================================================
 # GENERIC FINALISATION

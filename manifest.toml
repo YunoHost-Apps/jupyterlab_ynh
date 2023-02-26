@@ -47,6 +47,13 @@ ram.runtime = "50M"
     type = "boolean"
     default = true
 
+    [install.enable_extensions]
+    ask.en = "Allow users to install extensions?"
+    ask.fr = "Permettre aux utilisateurs d'installer des extensions ?"
+    type = "boolean"
+    default = true
+
+
 [resources]
     [resources.ports]
     main.default = 8080

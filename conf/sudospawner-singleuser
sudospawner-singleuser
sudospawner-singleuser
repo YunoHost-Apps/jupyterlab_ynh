@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+if [ __ENABLE_EXTENSIONS__ -eq 1 ]; then
+	export JUPYTERLAB_DIR="$HOME/.local/share/__APP__/lab"
+	export PATH="__NODEJS_PATH__:$PATH"
+fi
+
+
+# Delegate the notebook server launch to the jupyterhub-singleuser script.
+# this is how most sudospawner-singleuser scripts should end.
+exec "$(dirname "$0")/jupyterhub-singleuser" $@

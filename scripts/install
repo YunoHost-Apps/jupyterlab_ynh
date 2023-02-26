@@ -26,11 +26,16 @@ python3 -m pip install pipenv
 #=================================================
 ynh_script_progression --message="Building app..."
 
-mkdir -p "$install_dir"
+# Set permissions to app files
+mkdir -p "$install_dir/.venv"
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
 
-pushd $install_dir
-	mkdir -p .venv
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
+pushd "$install_dir"
+	sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR sudospawner 2>&1
+	sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
 popd
 
 #=================================================
@@ -39,15 +44,34 @@ popd
 ynh_script_progression --message="Adding a configuration file..."
 
 mkdir -p "$install_dir/config"
-
 path=${path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$install_dir/config/jupyter_server_config.py"
+ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
+ynh_add_config --template="sudospawner-singleuser" --destination="$install_dir/.venv/bin/sudospawner-singleuser"
 
-chmod 750 "$install_dir"
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chmod 550 "$install_dir/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
+
+#=================================================
+# BUILD USER LABS
+#=================================================
+ynh_script_progression --message="Building JupyterLab for each user..." --weight=10
+
+if [ $enable_extensions -eq 1 ]; then
+	ynh_use_nodejs
+	for user in $(ynh_user_list); do
+		JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
+		node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
+		sudo -u $user env "PATH=$node_path" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+	done
+fi
 
 #=================================================
 # SYSTEM CONFIGURATION

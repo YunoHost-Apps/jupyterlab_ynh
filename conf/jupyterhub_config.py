@@ -171,7 +171,7 @@ c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 #c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 ## The location of jupyterhub data files (e.g. /usr/local/share/jupyterhub)
-#c.JupyterHub.data_files_path = '/opt/jupyterlab/.venv/share/jupyterhub'
+c.JupyterHub.data_files_path = '__INSTALL_DIR__/.venv/share/jupyterhub'
 
 ## Include any kwargs to pass to the database connection. See
 #  sqlalchemy.create_engine for details.
@@ -469,7 +469,7 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #    - default: jupyterhub.spawner.LocalProcessSpawner
 #    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
 #    - localprocess: jupyterhub.spawner.LocalProcessSpawner
-#c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
+c.JupyterHub.spawner_class = 'sudospawner.SudoSpawner'
 
 ## Path to SSL certificate file for the public facing interface of the proxy
 #  
@@ -685,7 +685,7 @@ c.Spawner.default_url = '/lab'
 #  This whitelist is used to ensure that sensitive information in the JupyterHub
 #  process's environment (such as `CONFIGPROXY_AUTH_TOKEN`) is not passed to the
 #  single-user server's process.
-#c.Spawner.env_keep = ['PATH', 'PYTHONPATH', 'CONDA_ROOT', 'CONDA_DEFAULT_ENV', 'VIRTUAL_ENV', 'LANG', 'LC_ALL']
+c.Spawner.env_keep = ['PATH', 'PYTHONPATH', 'CONDA_ROOT', 'CONDA_DEFAULT_ENV', 'VIRTUAL_ENV', 'LANG', 'LC_ALL', 'JUPYTERHUB_SINGLEUSER_APP']
 
 ## Extra environment variables to set for the single-user server's process.
 #  
@@ -762,7 +762,7 @@ c.Spawner.default_url = '/lab'
 #  
 #  Note that this does *not* prevent users from accessing files outside of this
 #  path! They can do so with many other means.
-#c.Spawner.notebook_dir = ''
+c.Spawner.notebook_dir = '~'
 
 ## An HTML form for options a user can specify on launching their server.
 #  

@@ -31,6 +31,8 @@ ynh_remove_nginx_config
 
 ynh_remove_nodejs
 
+ynh_secure_remove "/etc/sudoers.d/$app-sudoers"
+
 #=================================================
 # END OF SCRIPT
 #=================================================

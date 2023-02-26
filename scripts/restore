@@ -17,8 +17,13 @@ ynh_script_progression --message="Restoring the app main directory..." --weight=
 
 ynh_restore_file --origin_path="$install_dir"
 
-chown -R root: $install_dir/
-chown -R $admin: $install_dir/.venv/
+mkdir -p "$install_dir/.venv"
+
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
 
 #=================================================
 # SPECIFIC RESTORATION
@@ -44,6 +49,22 @@ ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
 systemctl enable $app.service --quiet
 
 yunohost service add $app --description="$app daemon"
+
+#=================================================
+# RESTORE SUDOERS
+#=================================================
+ynh_script_progression --message="Restoring sudoers configuration..." --weight=2
+
+ynh_restore_file --origin_path="/etc/sudoers.d/$app-sudoers"
+
+# Set permissions on app files
+chmod 550 "$install_dir/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
+chown root:root "/etc/sudoers.d/$app-sudoers"
+chmod 440 "/etc/sudoers.d/$app-sudoers"
 
 #=================================================
 # GENERIC FINALIZATION
