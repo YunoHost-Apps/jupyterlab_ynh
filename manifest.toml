@@ -29,16 +29,13 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
 [install]
     [install.domain]
-    # this is a generic question - ask strings are automatically handled by Yunohost's core
     type = "domain"
 
     [install.path]
-    # this is a generic question - ask strings are automatically handled by Yunohost's core
     type = "path"
     default = "/jupyterlab"
 
     [install.admin]
-    # this is a generic question - ask strings are automatically handled by Yunohost's core
     type = "user"
 
     [install.init_main_permission]
@@ -58,9 +55,21 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     default = true
 
 [resources]
+    [resources.ports]
+    main.default = 8080
+    hub.default = 8081
+    http_proxy.default = 8082
+
     [resources.system_user]
 
     [resources.install_dir]
 
     [resources.permissions]
     main.url = "/"
+
+    [resources.apt]
+    packages = "python3-dev python3-pip"
+
+    extras.yarn.repo = "deb https://dl.yarnpkg.com/debian/ stable main"
+    extras.yarn.key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
+    extras.yarn.packages = "yarn"

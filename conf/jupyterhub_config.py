@@ -171,7 +171,7 @@ c.JupyterHub.bind_url = 'http://:__PORT____PATH__'
 #c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 ## The location of jupyterhub data files (e.g. /usr/local/share/jupyterhub)
-c.JupyterHub.data_files_path = '__FINAL_PATH__/.venv/share/jupyterhub'
+c.JupyterHub.data_files_path = '__INSTALL_DIR__/.venv/share/jupyterhub'
 
 ## Include any kwargs to pass to the database connection. See
 #  sqlalchemy.create_engine for details.
@@ -589,7 +589,7 @@ c.JupyterHub.spawner_class = 'sudospawner.SudoSpawner'
 #  Some spawners allow shell-style expansion here, allowing you to use
 #  environment variables here. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
-c.Spawner.args = ['--config=__FINAL_PATH__/config/jupyter_notebook_config.py']
+c.Spawner.args = ['--config=__INSTALL_DIR__/config/jupyter_notebook_config.py']
 
 ## An optional hook function that you can implement to pass `auth_state` to the
 #  spawner after it has been initialized but before it starts. The `auth_state`
