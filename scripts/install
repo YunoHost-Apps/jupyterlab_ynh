@@ -10,51 +10,6 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-#REMOVEME? ynh_clean_setup () {
-	ynh_clean_check_starting
-}
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-#REMOVEME? domain=$YNH_APP_ARG_DOMAIN
-#REMOVEME? path=$YNH_APP_ARG_PATH
-#REMOVEME? is_public=$YNH_APP_ARG_IS_PUBLIC
-#REMOVEME? admin=$YNH_APP_ARG_ADMIN
-#REMOVEME? enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
-#REMOVEME? enable_extensions=$YNH_APP_ARG_ENABLE_EXTENSIONS
-
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-#REMOVEME? ynh_script_progression --message="Validating installation parameters..." --weight=1
-
-#REMOVEME? install_dir=/opt/yunohost/$app
-#REMOVEME? test ! -e "$install_dir" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-#REMOVEME? ynh_webpath_register --app=$app --domain=$domain --path=$path
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-#REMOVEME? ynh_script_progression --message="Storing installation settings..." --weight=1
-
-#REMOVEME? ynh_app_setting_set --app=$app --key=domain --value=$domain
-#REMOVEME? ynh_app_setting_set --app=$app --key=path --value=$path
-#REMOVEME? ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
-ynh_app_setting_set --app=$app --key=enable_extensions --value=$enable_extensions
-
-#=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
@@ -71,19 +26,9 @@ ynh_app_setting_set --app=$app --key=enable_extensions --value=$enable_extension
 #REMOVEME? ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
 
 #=================================================
-# CREATE DEDICATED USER
-#=================================================
-#REMOVEME? ynh_script_progression --message="Configuring system user..." --weight=1
-
-# Create a system user
-#REMOVEME? ynh_system_user_create --username=$app
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Installing dependencies..." --weight=23
-
-#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
+ynh_script_progression --message="Installing dependencies..." --weight=23
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
@@ -95,8 +40,6 @@ npm install -g configurable-http-proxy
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=64
-
-#REMOVEME? ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 
 # Set permissions to app files
 mkdir -p "$install_dir/.venv"
@@ -184,23 +127,6 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=4
-
-# Make app public if necessary
-#REMOVEME? if [ $is_public -eq 1 ]; then
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
