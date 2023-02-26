@@ -76,8 +76,9 @@ path=${path%/}
 ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
-chown -R root: $install_dir/
-chown -R $admin: $install_dir/.venv/
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # START SYSTEMD SERVICE
