@@ -4,7 +4,9 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-User=root
+#User=root
+User=__APP__
+Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
