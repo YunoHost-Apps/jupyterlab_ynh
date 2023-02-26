@@ -1,1 +1,1 @@
-__APP__ ALL=(%__APP__.main) NOPASSWD: __FINALPATH__/.venv/bin/sudospawner
+__APP__ ALL=(%__APP__.main) NOPASSWD: __INSTALL_DIR__/.venv/bin/sudospawner

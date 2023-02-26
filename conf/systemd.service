@@ -9,10 +9,10 @@ Environment="PATH=__NODE_PATH__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
 Environment="JUPYTERHUB_SINGLEUSER_APP=jupyter_server.serverapp.ServerApp"
 User=__APP__
 Group=__APP__
-ExecStart=/usr/local/bin/pipenv run jupyterhub -f __FINALPATH__/config/jupyterhub_config.py
+ExecStart=/usr/local/bin/pipenv run jupyterhub -f __INSTALL_DIR__/config/jupyterhub_config.py
 Restart=always
 RestartSec=10
-WorkingDirectory=__FINALPATH__
+WorkingDirectory=__INSTALL_DIR__
 
 # Sandboxing options to harden security
 # Depending on specificities of your service/app, you may need to tweak these 

@@ -12,19 +12,19 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=3
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=3
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain="$(ynh_app_setting_get --app=$app --key=domain)"
-path_url="$(ynh_app_setting_get --app=$app --key=path)"
-admin="$(ynh_app_setting_get --app=$app --key=admin)"
-final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
-port="$(ynh_app_setting_get --app=$app --key=port)"
-port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
-port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
-enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
-enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
+#REMOVEME? domain="$(ynh_app_setting_get --app=$app --key=domain)"
+#REMOVEME? path="$(ynh_app_setting_get --app=$app --key=path)"
+#REMOVEME? admin="$(ynh_app_setting_get --app=$app --key=admin)"
+#REMOVEME? #REMOVEME? install_dir="$(ynh_app_setting_get --app=$app --key=install_dir)"
+#REMOVEME? port="$(ynh_app_setting_get --app=$app --key=port)"
+#REMOVEME? port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+#REMOVEME? port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+#REMOVEME? enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+#REMOVEME? enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # CHECK VERSION
@@ -43,18 +43,18 @@ if [ -z "$enable_extensions" ]; then
 fi
 
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/opt/yunohost/$app
+# If install_dir doesn't exist, create it
+if [ -z "$install_dir" ]; then
+#REMOVEME? 	install_dir=/opt/yunohost/$app
 
-	mkdir -p $final_path
+	mkdir -p $install_dir
 
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 fi
 
 # Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
+#REMOVEME? if ynh_legacy_permissions_exists; then
+#REMOVEME? 	ynh_legacy_permissions_delete_all
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
@@ -62,18 +62,18 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	ynh_clean_check_starting
 
 	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -95,17 +95,17 @@ ynh_add_nginx_config
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
+#REMOVEME? ynh_system_user_create --username=$app
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=83
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=83
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
@@ -122,13 +122,13 @@ then
 	ynh_script_progression --message="Upgrading source files..." --weight=160
 
 	# Set permissions to app files
-	mkdir -p "$final_path/.venv"
-	chown -R $app:$app "$final_path"
-	chmod -R g=u,g-w,o-rwx "$final_path"
-	setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
-	setfacl -n -m g:$app.main:x "$final_path"
+	mkdir -p "$install_dir/.venv"
+	chown -R $app:$app "$install_dir"
+	chmod -R g=u,g-w,o-rwx "$install_dir"
+	setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+	setfacl -n -m g:$app.main:x "$install_dir"
 
-	pushd "$final_path"
+	pushd "$install_dir"
 		sudo -u $app PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter-server jupyterhub-ldapauthenticator pyzmq sudospawner --three 2>&1
 		sudo -u $app python3 -m pipenv run jupyterhub upgrade-db 2>&1
 	popd
@@ -140,13 +140,13 @@ fi
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-mkdir -p "$final_path/config"
-path="${path_url%/}"
+mkdir -p "$install_dir/config"
+path="${path%/}"
 
-ynh_add_config --template="jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-ynh_add_config --template="jupyter_server_config.py" --destination="$final_path/config/jupyter_server_config.py"
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_server_config.py" --destination="$install_dir/config/jupyter_server_config.py"
 ynh_add_config --template="app-sudoers" --destination="/etc/sudoers.d/$app-sudoers"
-ynh_add_config --template="sudospawner-singleuser" --destination="$final_path/.venv/bin/sudospawner-singleuser"
+ynh_add_config --template="sudospawner-singleuser" --destination="$install_dir/.venv/bin/sudospawner-singleuser"
 
 #=================================================
 # SETUP SYSTEMD
@@ -165,11 +165,11 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chmod 550 "$final_path/.venv/bin/sudospawner-singleuser"
-chown -R $app:$app "$final_path"
-chmod -R g=u,g-w,o-rwx "$final_path"
-setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$final_path/.venv"
-setfacl -n -m g:$app.main:x "$final_path"
+chmod 550 "$install_dir/.venv/bin/sudospawner-singleuser"
+chown -R $app:$app "$install_dir"
+chmod -R g=u,g-w,o-rwx "$install_dir"
+setfacl -nR -m g:$app.main:rx -m d:g:$app.main:rx "$install_dir/.venv"
+setfacl -n -m g:$app.main:x "$install_dir"
 chown root:root "/etc/sudoers.d/$app-sudoers"
 chmod 440 "/etc/sudoers.d/$app-sudoers"
 
@@ -184,7 +184,7 @@ if [ $enable_extensions -eq 1 ]; then
 	for user in $(ynh_user_list); do
 		JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
 		node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
-		sudo -u $user env "PATH=$node_path" "$final_path/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+		sudo -u $user env "PATH=$node_path" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
 	done
 fi
 
@@ -204,9 +204,9 @@ ynh_systemd_action --service_name=$app --action=start --line_match="JupyterHub i
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..."
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

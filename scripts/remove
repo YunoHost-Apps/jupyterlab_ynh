@@ -12,19 +12,19 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain="$(ynh_app_setting_get --app=$app --key=domain)"
-path_url="$(ynh_app_setting_get --app=$app --key=path)"
-admin="$(ynh_app_setting_get --app=$app --key=admin)"
-final_path="$(ynh_app_setting_get --app=$app --key=final_path)"
-port="$(ynh_app_setting_get --app=$app --key=port)"
-port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
-port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
-enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
-enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
+#REMOVEME? domain="$(ynh_app_setting_get --app=$app --key=domain)"
+#REMOVEME? path="$(ynh_app_setting_get --app=$app --key=path)"
+#REMOVEME? admin="$(ynh_app_setting_get --app=$app --key=admin)"
+#REMOVEME? #REMOVEME? install_dir="$(ynh_app_setting_get --app=$app --key=install_dir)"
+#REMOVEME? port="$(ynh_app_setting_get --app=$app --key=port)"
+#REMOVEME? port_hub="$(ynh_app_setting_get --app=$app --key=port_hub)"
+#REMOVEME? port_http_proxy="$(ynh_app_setting_get --app=$app --key=port_http_proxy)"
+#REMOVEME? enable_terminal="$(ynh_app_setting_get --app=$app --key=enable_terminal)"
+#REMOVEME? enable_extensions="$(ynh_app_setting_get --app=$app --key=enable_extensions)"
 
 #=================================================
 # STANDARD REMOVE
@@ -50,20 +50,20 @@ ynh_remove_systemd_config
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=4
+#REMOVEME? ynh_script_progression --message="Removing dependencies..." --weight=4
 
 # Remove metapackage and its dependencies
-ynh_remove_app_dependencies
+#REMOVEME? ynh_remove_app_dependencies
 
 ynh_remove_nodejs
 
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Removing app main directory..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing app main directory..." --weight=1
 
 # Remove the app directory securely
-ynh_secure_remove --file="$final_path"
+#REMOVEME? ynh_secure_remove --file="$install_dir"
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
@@ -106,10 +106,10 @@ fi
 #=================================================
 # REMOVE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing the dedicated system user..." --weight=1
 
 # Delete a system user
-ynh_system_user_delete --username=$app
+#REMOVEME? ynh_system_user_delete --username=$app
 
 #=================================================
 # END OF SCRIPT
