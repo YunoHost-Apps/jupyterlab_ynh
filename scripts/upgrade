@@ -50,6 +50,20 @@ then
 	popd
 fi
 
+
+#=================================================
+# REAPPLY SYSTEM CONFIGURATIONS
+#=================================================
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+yunohost service add $app --description="$app daemon"
+
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
@@ -64,19 +78,6 @@ ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$i
 
 chown -R root: $install_dir/
 chown -R $admin: $install_dir/.venv/
-
-#=================================================
-# REAPPLY SYSTEM CONFIGURATIONS
-#=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-yunohost service add $app --description="$app daemon"
 
 #=================================================
 # START SYSTEMD SERVICE
