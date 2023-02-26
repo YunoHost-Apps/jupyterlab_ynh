@@ -10,22 +10,6 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN A PORT
-#=================================================
-#REMOVEME? ynh_script_progression --message="Finding an available port..." --weight=1
-
-# Find a free port
-#REMOVEME? port=$(ynh_find_port --port=8080)
-#REMOVEME? port_hub=$(ynh_find_port --port=$(($port + 1)))
-#REMOVEME? port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
-
-#REMOVEME? ynh_app_setting_set --app=$app --key=port --value=$port
-#REMOVEME? ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
-#REMOVEME? ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=23
@@ -33,7 +17,6 @@ ynh_script_progression --message="Installing dependencies..." --weight=23
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 python3 -m pip install pipenv
-
 npm install -g configurable-http-proxy
 
 #=================================================
