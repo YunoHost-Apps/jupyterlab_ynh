@@ -5,7 +5,7 @@ name = "JupyterLab"
 description.en = "Code console environment for running Python code interactively"
 description.fr = "Console de code pour exécuter du code Python de manière interactive"
 
-version = "3.1.11~ynh1"
+version = "3.6.1~ynh1"
 
 maintainers = ["kay0u"]
 
