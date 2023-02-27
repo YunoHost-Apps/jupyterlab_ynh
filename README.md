@@ -18,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Code console environment for running Python code interactively
 
-**Shipped version:** 3.1.11~ynh1
+**Shipped version:** 3.6.1~ynh1
 
 **Demo:** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
