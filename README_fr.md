@@ -28,7 +28,6 @@ Console de code pour exécuter du code Python de manière interactive
 
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://example.com>
 * Documentation officielle de l’admin : <https://jupyterlab.readthedocs.io/en/stable/>
 * Dépôt de code officiel de l’app : <https://github.com/jupyterhub/jupyterhub>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_jupyterlab>
