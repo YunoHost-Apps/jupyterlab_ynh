@@ -99,7 +99,8 @@ if [ $enable_extensions -eq 1 ]; then
 	for user in $(ynh_user_list); do
 		JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
 		node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
-		sudo -u $user env "PATH=$node_path" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+		#sudo -u $user
+		env "PATH=$node_path" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
 	done
 fi
 
