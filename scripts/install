@@ -51,9 +51,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=3
 
-# Create a dedicated systemd config
-ynh_replace_string --match_string="__NODE_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
-
+env_path="$PATH"
 ynh_add_systemd_config
 
 #=================================================
