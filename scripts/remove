@@ -53,28 +53,6 @@ ynh_script_progression --message="Removing sudoers configuration..." --weight=1
 # Remove the dedicated NGINX config
 ynh_secure_remove "/etc/sudoers.d/$app-sudoers"
 
-# #=================================================
-# # CLOSE A PORT
-# #=================================================
-
-# if yunohost firewall list | grep -q "\- $port$"
-# then
-# 	ynh_script_progression --message="Closing port $port..."
-# 	ynh_exec_warn_less yunohost firewall disallow TCP $port
-# fi
-
-# if yunohost firewall list | grep -q "\- $port_hub$"
-# then
-# 	ynh_script_progression --message="Closing port $port_hub..."
-# 	ynh_exec_warn_less yunohost firewall disallow TCP $port_hub
-# fi
-
-# if yunohost firewall list | grep -q "\- $port_http_proxy$"
-# then
-# 	ynh_script_progression --message="Closing port $port_http_proxy..."
-# 	ynh_exec_warn_less yunohost firewall disallow TCP $port_http_proxy
-# fi
-
 #=================================================
 # END OF SCRIPT
 #=================================================
