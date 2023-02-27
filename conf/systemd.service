@@ -5,7 +5,7 @@ After=syslog.target network.target
 [Service]
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
-Environment="PATH=__NODE_PATH__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="PATH=__ENV_PATH__"
 Environment="JUPYTERHUB_SINGLEUSER_APP=jupyter_server.serverapp.ServerApp"
 User=__APP__
 Group=__APP__
