@@ -29,7 +29,6 @@ Code console environment for running Python code interactively
 ## Documentation and resources
 
 * Official app website: <https://example.com>
-* Official user documentation: <https://yunohost.org/en/app_jupyterlab>
 * Official admin documentation: <https://jupyterlab.readthedocs.io/en/stable/>
 * Upstream app code repository: <https://github.com/jupyterhub/jupyterhub>
 * YunoHost documentation for this app: <https://yunohost.org/app_jupyterlab>
