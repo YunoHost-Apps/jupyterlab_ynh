@@ -15,9 +15,8 @@ source /usr/share/yunohost/helpers
 ynh_script_progression --message="Installing dependencies..." --weight=23
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-
-python3 -m pip install pipenv
-npm install -g configurable-http-proxy
+ynh_exec_warn_less python3 -m pip install pipenv
+ynh_exec_warn_less npm install -g configurable-http-proxy
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -41,7 +40,7 @@ mkdir -p "$install_dir"
 
 pushd $install_dir
 	mkdir -p .venv
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
+	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq sudospawner jupyterlab-language-pack-fr-FR
 popd
 
 #=================================================
