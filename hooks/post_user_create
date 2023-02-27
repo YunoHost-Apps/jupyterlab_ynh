@@ -14,5 +14,6 @@ ynh_use_nodejs
 if [ $enable_extensions -eq 1 ]; then
 	export JUPYTERLAB_DIR="$(getent passwd $user | cut -d: -f6)/.local/share/$app/lab"
 	node_path="$nodejs_path:$(sudo -u $user sh -c 'echo $PATH')"
-	sudo -u $user env "PATH=$node_path:$PATH" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
+	#sudo -u $user 
+	env "PATH=$node_path:$PATH" "$install_dir/.venv/bin/jupyter" lab build --app-dir="$JUPYTERLAB_DIR"
 fi
