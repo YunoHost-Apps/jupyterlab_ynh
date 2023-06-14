@@ -6,7 +6,7 @@
         "en": "Code console environment for running Python code interactively",
         "fr": "Console de code pour exécuter du code Python de manière interactive"
     },
-    "version": "3.6.1~ynh2",
+    "version": "4.0.2~ynh2",
     "url": "https://jupyter.org",
     "upstream": {
         "license": "BSD-3-Clause",
@@ -22,7 +22,7 @@
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 11.0.9"
+        "yunohost": ">= 11.1.20"
     },
     "multi_instance": true,
     "services": [
