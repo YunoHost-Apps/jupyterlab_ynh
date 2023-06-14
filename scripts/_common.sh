@@ -4,9 +4,9 @@
 # COMMON VARIABLES
 #=================================================
 
-nodejs_version="16"
+nodejs_version="18"
 
-jupyterlab_version="3.6.1"
+jupyterlab_version="4.0.2"
 
 #=================================================
 # PERSONAL HELPERS

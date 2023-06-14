@@ -5,7 +5,7 @@ name = "JupyterLab"
 description.en = "Code console environment for running Python code interactively"
 description.fr = "Console de code pour exécuter du code Python de manière interactive"
 
-version = "3.6.1~ynh3"
+version = "4.0.2~ynh1"
 
 maintainers = ["kay0u"]
 
@@ -17,7 +17,7 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 11.1.11"
+yunohost = ">= 11.1.20"
 architectures = "all"
 multi_instance = true
 ldap = true
@@ -53,8 +53,8 @@ ram.runtime = "50M"
     type = "boolean"
     default = true
 
-
 [resources]
+
     [resources.ports]
     main.default = 8080
     hub.default = 8081
@@ -69,7 +69,6 @@ ram.runtime = "50M"
 
     [resources.apt]
     packages = "python3-dev python3-pip"
-
     extras.yarn.repo = "deb https://dl.yarnpkg.com/debian/ stable main"
     extras.yarn.key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
     extras.yarn.packages = "yarn"
