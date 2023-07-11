@@ -94,7 +94,6 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 $ynh_npm install -g configurable-http-proxy
-python3 -m pip install pipenv
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -106,9 +105,12 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Building app..." --weight=160
 
+	ynh_secure_remove $final_path/.venv
+
 	pushd $final_path
-		mkdir -p .venv
-		PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq
+		python3 -m venv $final_path/venv
+		source $final_path/venv/bin/activate
+		ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq
 	popd
 fi
 
@@ -126,7 +128,7 @@ ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_p
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
 chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chown -R $admin: $final_path/venv/
 
 #=================================================
 # SETUP SYSTEMD

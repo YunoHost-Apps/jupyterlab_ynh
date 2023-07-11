@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="python3-dev python3-pip"
+pkg_dependencies="python3-dev python3-pip python3-venv"
 
 nodejs_version="18"
 
