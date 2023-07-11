@@ -13,43 +13,43 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
-ynh_clean_setup () {
+#REMOVEME? ynh_clean_setup () {
 	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
-admin=$YNH_APP_ARG_ADMIN
-enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
+#REMOVEME? domain=$YNH_APP_ARG_DOMAIN
+#REMOVEME? path=$YNH_APP_ARG_PATH
+#REMOVEME? is_public=$YNH_APP_ARG_IS_PUBLIC
+#REMOVEME? admin=$YNH_APP_ARG_ADMIN
+#REMOVEME? enable_terminal=$YNH_APP_ARG_ENABLE_TERMINAL
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=1
+#REMOVEME? ynh_script_progression --message="Validating installation parameters..." --weight=1
 
-final_path=/opt/$app
-test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
+#REMOVEME? install_dir=/opt/$app
+#REMOVEME? test ! -e "$install_dir" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+#REMOVEME? ynh_webpath_register --app=$app --domain=$domain --path=$path
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Storing installation settings..." --weight=1
 
-ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path --value=$path_url
-ynh_app_setting_set --app=$app --key=admin --value=$admin
+#REMOVEME? ynh_app_setting_set --app=$app --key=domain --value=$domain
+#REMOVEME? ynh_app_setting_set --app=$app --key=path --value=$path
+#REMOVEME? ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
 
 #=================================================
@@ -57,24 +57,24 @@ ynh_app_setting_set --app=$app --key=enable_terminal --value=$enable_terminal
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
-ynh_script_progression --message="Finding an available port..." --weight=1
+#REMOVEME? ynh_script_progression --message="Finding an available port..." --weight=1
 
 # Find an available port
-port=$(ynh_find_port --port=8080)
-ynh_app_setting_set --app=$app --key=port --value=$port
+#REMOVEME? port=$(ynh_find_port --port=8080)
+#REMOVEME? ynh_app_setting_set --app=$app --key=port --value=$port
 
-port_hub=$(ynh_find_port --port=$(($port + 1)))
-ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
+#REMOVEME? port_hub=$(ynh_find_port --port=$(($port + 1)))
+#REMOVEME? ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
 
-port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
-ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
+#REMOVEME? port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
+#REMOVEME? ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=23
+#REMOVEME? ynh_script_progression --message="Installing dependencies..." --weight=23
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 $ynh_npm install -g configurable-http-proxy
@@ -95,12 +95,12 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Building app..."
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-mkdir -p "$final_path"
+#REMOVEME? ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
+mkdir -p "$install_dir"
 
-pushd $final_path
-	python3 -m venv $final_path/venv
-	source $final_path/venv/bin/activate
+pushd $install_dir
+	python3 -m venv $install_dir/venv
+	source $install_dir/venv/bin/activate
 	ynh_exec_warn_less pip install npm@latest jupyterlab==$jupyterlab_version jupyterhub jupyter_collaboration notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
 popd
 
@@ -109,15 +109,15 @@ popd
 #=================================================
 ynh_script_progression --message="Adding a configuration file..."
 
-mkdir -p "$final_path/config"
+mkdir -p "$install_dir/config"
 
-path=${path_url%/}
+path=${path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
+ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
-chown -R root: $final_path/
-chown -R $admin: $final_path/venv/
+chown -R root: $install_dir/
+chown -R $admin: $install_dir/venv/
 
 #=================================================
 # SETUP SYSTEMD
@@ -147,20 +147,20 @@ ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=4
+#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=4
 
 # Make app public if necessary
-if [ $is_public -eq 1 ]
+#REMOVEME? if [ $is_public -eq 1 ]
 then
-	ynh_permission_update --permission="main" --add="visitors"
+#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
