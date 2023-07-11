@@ -16,15 +16,8 @@ ynh_script_progression --message="Installing dependencies..." --weight=10
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
+
 $ynh_npm install -g configurable-http-proxy
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
 
 #=================================================
 # SPECIFIC SETUP
@@ -32,8 +25,6 @@ ynh_add_nginx_config
 # BUILD APP
 #=================================================
 ynh_script_progression --message="Building app..."
-
-#mkdir -p "$install_dir"
 
 pushd $install_dir
 	python3 -m venv $install_dir/venv
@@ -61,15 +52,11 @@ chown -R $admin: $install_dir/venv/
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=3
 
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description="Python console environment" --log="/var/log/$app/$app.log"
 
