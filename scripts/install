@@ -38,7 +38,7 @@ ynh_script_progression --message="Building app..."
 pushd $install_dir
 	python3 -m venv $install_dir/venv
 	source $install_dir/venv/bin/activate
-	ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub jupyter_collaboration notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
+	ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub jupyter_collaboration notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR toml
 popd
 
 #=================================================
