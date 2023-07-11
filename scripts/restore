@@ -34,7 +34,7 @@ chown -R $admin: $install_dir/.venv/
 #=================================================
 # REINSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Reinstalling dependencies..." --weight=75
+ynh_script_progression --message="Reinstalling dependencies..." --weight=10
 
 # Define and install dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
@@ -54,7 +54,7 @@ systemctl enable $app.service --quiet
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="$app daemon"
+yunohost service add $app --description="Python console environment" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
