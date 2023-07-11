@@ -8,8 +8,8 @@ User=root
 WorkingDirectory=__FINALPATH__/
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
-Environment="__YNH_NODE_LOAD_PATH__:__FINALPATH__/.venv/bin"
-ExecStart=__FINALPATH__/.venv/bin/jupyterhub -f __FINALPATH__/config/jupyterhub_config.py --upgrade-db
+Environment="__YNH_NODE_LOAD_PATH__:__FINALPATH__/venv/bin"
+ExecStart=__FINALPATH__/venv/bin/jupyterhub -f __FINALPATH__/config/jupyterhub_config.py --upgrade-db
 Restart=always
 RestartSec=10
 
