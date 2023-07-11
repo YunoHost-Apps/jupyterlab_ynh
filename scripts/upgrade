@@ -56,7 +56,7 @@ then
 	pushd $install_dir
 		python3 -m venv $install_dir/venv
 		source $install_dir/venv/bin/activate
-		ynh_exec_warn_less pip install npm@latest jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq toml
+		ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq toml
 	popd
 fi
 
