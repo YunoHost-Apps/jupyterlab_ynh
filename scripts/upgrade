@@ -28,7 +28,6 @@ enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -105,7 +104,7 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Building app..." --weight=160
 
-	ynh_secure_remove $final_path/.venv
+	#ynh_secure_remove $final_path/.venv
 
 	pushd $final_path
 		python3 -m venv $final_path/venv
