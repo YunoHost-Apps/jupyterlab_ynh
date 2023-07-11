@@ -106,7 +106,6 @@ then
 	ynh_script_progression --message="Building app..." --weight=160
 
 	ynh_secure_remove $final_path/.venv
-
 	python3 -m venv $final_path/venv
 	source $final_path/venv/bin/activate
 
