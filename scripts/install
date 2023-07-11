@@ -24,7 +24,7 @@ $ynh_npm install -g configurable-http-proxy
 #=================================================
 # BUILD APP
 #=================================================
-ynh_script_progression --message="Building app..."
+ynh_script_progression --message="Building $app..." --weight=10
 
 pushd $install_dir
 	python3 -m venv $install_dir/venv
