@@ -92,7 +92,8 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=10
 ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
-$ynh_npm install -g configurable-http-proxy
+
+$ynh_npm install -g configurable-http-proxy npm
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -104,11 +105,12 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Building app..." --weight=160
 
-	#ynh_secure_remove $final_path/.venv
+	ynh_secure_remove $final_path/.venv
+
+	python3 -m venv $final_path/venv
+	source $final_path/venv/bin/activate
 
 	pushd $final_path
-		python3 -m venv $final_path/venv
-		source $final_path/venv/bin/activate
 		ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq
 	popd
 fi
