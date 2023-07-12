@@ -63,9 +63,7 @@ ynh_script_progression --message="Ensuring downward compatibility..."
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/opt/$app
-
 	mkdir -p $final_path
-
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
