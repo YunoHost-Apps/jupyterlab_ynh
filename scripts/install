@@ -99,8 +99,9 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 mkdir -p "$final_path"
 
 pushd $final_path
-	mkdir -p .venv
-	PIPENV_VENV_IN_PROJECT="enabled" PIPENV_SKIP_LOCK=true ynh_exec_warn_less python3 -m pipenv install jupyterlab==$jupyterlab_version jupyterhub notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
+	python3 -m venv $final_path/venv
+	source $final_path/venv/bin/activate
+	ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub jupyter_collaboration notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
 popd
 
 #=================================================
@@ -116,7 +117,7 @@ ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_p
 ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
 
 chown -R root: $final_path/
-chown -R $admin: $final_path/.venv/
+chown -R $admin: $final_path/venv/
 
 #=================================================
 # SETUP SYSTEMD
