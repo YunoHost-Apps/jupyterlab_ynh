@@ -19,7 +19,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
 
-**Shipped version:** 4.0.5~ynh1
+**Shipped version:** 4.0.7~ynh1
 
 **Demo:** https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo
 
@@ -65,7 +65,6 @@ You can now update the old template files with the new one.
 * Official app website: <https://jupyter.org>
 * Official admin documentation: <https://jupyterlab.readthedocs.io/en/stable/>
 * Upstream app code repository: <https://github.com/jupyterhub/jupyterhub>
-* YunoHost documentation for this app: <https://yunohost.org/app_jupyterlab>
 * Report a bug: <https://github.com/YunoHost-Apps/jupyterlab_ynh/issues>
 
 ## Developer info

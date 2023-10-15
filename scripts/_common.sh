@@ -9,7 +9,7 @@ pkg_dependencies="python3-dev python3-pip python3-venv"
 
 nodejs_version="18"
 
-jupyterlab_version="4.0.5"
+jupyterlab_version="4.0.7"
 
 #=================================================
 # PERSONAL HELPERS
