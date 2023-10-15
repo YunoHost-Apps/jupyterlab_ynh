@@ -65,7 +65,6 @@ You can now update the old template files with the new one.
 * Official app website: <https://jupyter.org>
 * Official admin documentation: <https://jupyterlab.readthedocs.io/en/stable/>
 * Upstream app code repository: <https://github.com/jupyterhub/jupyterhub>
-* YunoHost documentation for this app: <https://yunohost.org/app_jupyterlab>
 * Report a bug: <https://github.com/YunoHost-Apps/jupyterlab_ynh/issues>
 
 ## Developer info
