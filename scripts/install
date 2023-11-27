@@ -10,31 +10,15 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN A PORT
-#=================================================
-#REMOVEME? ynh_script_progression --message="Finding an available port..." --weight=1
-
-# Find an available port
-#REMOVEME? port=$(ynh_find_port --port=8080)
-#REMOVEME? ynh_app_setting_set --app=$app --key=port --value=$port
-
-#REMOVEME? port_hub=$(ynh_find_port --port=$(($port + 1)))
-#REMOVEME? ynh_app_setting_set --app=$app --key=port_hub --value=$port_hub
-
-#REMOVEME? port_http_proxy=$(ynh_find_port --port=$(($port_hub + 1)))
-#REMOVEME? ynh_app_setting_set --app=$app --key=port_http_proxy --value=$port_http_proxy
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Installing dependencies..." --weight=23
+ynh_script_progression --message="Installing dependencies..." --weight=23
 
-#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+
 ynh_use_nodejs
 $ynh_npm install -g configurable-http-proxy
+
 python3 -m pip install pipenv
 
 #=================================================
@@ -45,14 +29,18 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+yunohost service add $app --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
+
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # BUILD APP
 #=================================================
-ynh_script_progression --message="Building app..."
+ynh_script_progression --message="Building app..." --weight=5
 
-#REMOVEME? ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 mkdir -p "$install_dir"
 
 pushd $install_dir
@@ -64,34 +52,17 @@ popd
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression --message="Adding a configuration file..." --weight=1
 
 mkdir -p "$install_dir/config"
 
 path=${path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
 chown -R root: $install_dir/
 chown -R $admin: $install_dir/venv/
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..." --weight=3
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
-yunohost service add $app --description="$app daemon"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -100,24 +71,6 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=4
-
-# Make app public if necessary
-#REMOVEME? if [ $is_public -eq 1 ]
-then
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

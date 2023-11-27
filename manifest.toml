@@ -55,8 +55,17 @@ ram.runtime = "50M"
 
     [resources.install_dir]
 
+    [resources.ports]
+    main.default = 8080
+    hub.default = 8081
+    http_proxy.default = 8082
+
     [resources.permissions]
     main.url = "/"
 
     [resources.apt]
     packages = "python3-dev, python3-pip, python3-venv"
+
+    extras.yarn.repo = "deb https://dl.yarnpkg.com/debian/ stable main"
+    extras.yarn.key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
+    extras.yarn.packages = "yarn"
