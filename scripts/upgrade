@@ -12,18 +12,18 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=3
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=3
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
+#REMOVEME? admin=$(ynh_app_setting_get --app=$app --key=admin)
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? port=$(ynh_app_setting_get --app=$app --key=port)
+#REMOVEME? port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
+#REMOVEME? port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
+#REMOVEME? enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
 
 #=================================================
 # CHECK VERSION
@@ -34,17 +34,17 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	ynh_clean_check_starting
 	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -60,16 +60,16 @@ ynh_systemd_action --service_name=$app --action="stop"
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/opt/$app
-	mkdir -p $final_path
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# If install_dir doesn't exist, create it
+if [ -z "$install_dir" ]; then
+#REMOVEME? 	install_dir=/opt/$app
+	mkdir -p $install_dir
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 fi
 
 # Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
+#REMOVEME? if ynh_legacy_permissions_exists; then
+#REMOVEME? 	ynh_legacy_permissions_delete_all
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
@@ -85,9 +85,9 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=10
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=10
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 
@@ -103,11 +103,11 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Building app..." --weight=160
 
-	ynh_secure_remove $final_path/.venv
-	python3 -m venv $final_path/venv
-	source $final_path/venv/bin/activate
+#REMOVEME? 	ynh_secure_remove $install_dir/.venv
+	python3 -m venv $install_dir/venv
+	source $install_dir/venv/bin/activate
 
-	pushd $final_path
+	pushd $install_dir
 		ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq
 	popd
 fi
@@ -117,16 +117,16 @@ fi
 #=================================================
 ynh_script_progression --message="Updating a configuration file..."
 
-mkdir -p "$final_path/config"
+mkdir -p "$install_dir/config"
 
-path=${path_url%/}
+path=${path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
 
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
+ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
-chown -R root: $final_path/
-chown -R $admin: $final_path/venv/
+chown -R root: $install_dir/
+chown -R $admin: $install_dir/venv/
 
 #=================================================
 # SETUP SYSTEMD
@@ -155,9 +155,9 @@ ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..."
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
