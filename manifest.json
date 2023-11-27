@@ -6,7 +6,7 @@
         "en": "Code console environment for running Python code interactively",
         "fr": "Console de code pour exécuter du code Python de manière interactive"
     },
-    "version": "4.0.7~ynh1",
+    "version": "4.0.9~ynh1",
     "url": "https://jupyter.org",
     "upstream": {
         "license": "BSD-3-Clause",
