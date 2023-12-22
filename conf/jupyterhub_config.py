@@ -589,7 +589,7 @@ c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:__PORT_HTTP_PROXY__'
 #  Some spawners allow shell-style expansion here, allowing you to use
 #  environment variables here. Most, including the default, do not. Consult the
 #  documentation for your spawner to verify!
-c.Spawner.args = ['--config=__FINAL_PATH__/config/jupyter_notebook_config.py']
+c.Spawner.args = ['--config=__INSTALL_DIR__/config/jupyter_notebook_config.py']
 
 ## An optional hook function that you can implement to pass `auth_state` to the
 #  spawner after it has been initialized but before it starts. The `auth_state`
