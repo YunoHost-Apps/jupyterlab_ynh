@@ -25,7 +25,7 @@ chown -R $admin: $install_dir/venv/
 #=================================================
 # REINSTALL DEPENDENCIES
 #=================================================
- ynh_script_progression --message="Reinstalling dependencies..." --weight=75
+ ynh_script_progression --message="Reinstalling dependencies..." --weight=15
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
