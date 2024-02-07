@@ -2,6 +2,15 @@ test_format = 1.0
 
 [default]
 
+    # ------------
+    # Tests to run
+    # ------------
+
+    # -------------------------------------------------------------------------------
+    # EVERYTHING PAST THIS POINT IS OPTIONAL AND MOST LIKELY UNNECESSARY FOR NEW APPS
+    #--------------------------------------------------------------------------------
+    
+    exclude = ["install.multi"]
 
     # -------------------------------
     # Default args to use for install
