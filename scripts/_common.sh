@@ -6,7 +6,7 @@
 
 nodejs_version="18"
 
-jupyterlab_version="4.0.9"
+jupyterlab_version="4.1.0"
 
 #=================================================
 # PERSONAL HELPERS
