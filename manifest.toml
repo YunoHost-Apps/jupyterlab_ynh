@@ -64,6 +64,8 @@ ram.runtime = "50M"
     [resources.system_user]
 
     [resources.install_dir]
+    # Using /opt because /var/www has ACLs that prevent users to access it
+    dir = "/opt/__APP__"
 
     [resources.ports]
     main.default = 8080
