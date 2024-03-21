@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -12,65 +10,62 @@ source /usr/share/yunohost/helpers
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=15
+ynh_script_progression --message="Installing NodeJS..." --weight=15
 
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-
 ynh_use_nodejs
-ynh_exec_warn_less $ynh_npm install -g configurable-http-proxy
 
-python3 -m pip install pipenv
+ynh_exec_warn_less "$ynh_npm" install -g configurable-http-proxy
 
 #=================================================
-# NGINX CONFIGURATION
+# BUILD APP
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
+ynh_script_progression --message="Building app..." --weight=5
+
+python3 -m venv "$install_dir/venv"
+
+ynh_exec_warn_less "$install_dir/venv/bin/python3" pip install \
+    jupyterlab=="$jupyterlab_version" \
+    jupyterhub \
+    jupyter_collaboration \
+    notebook \
+    jupyterhub-ldapauthenticator \
+    pyzmq \
+    jupyterlab-language-pack-fr-FR
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding $app's configuration file..." --weight=1
+
+mkdir -p "$install_dir/config"
+
+path_no_slash=${path%/}
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
+
+chown -R root: "$install_dir"
+chown -R "$admin:" "$install_dir/venv"
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-yunohost service add $app --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
-
-#=================================================
-# SPECIFIC SETUP
-#=================================================
-# BUILD APP
-#=================================================
-ynh_script_progression --message="Building app..." --weight=5
-
-mkdir -p "$install_dir"
-
-pushd $install_dir
-	python3 -m venv $install_dir/venv
-	source $install_dir/venv/bin/activate
-	ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub jupyter_collaboration notebook jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
-popd
-
-#=================================================
-# ADD A CONFIGURATION
-#=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
-
-mkdir -p "$install_dir/config"
-
-path=${path%/}
-
-ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
-ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
-
-chown -R root: $install_dir/
-chown -R $admin: $install_dir/venv/
+yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+ynh_script_progression --message="Starting $app's systemd service..." --weight=3
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT

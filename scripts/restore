@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -11,25 +9,24 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Reinstalling NodeJS..." --weight=15
+
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
+ynh_use_nodejs
+
+ynh_exec_warn_less "$ynh_npm" install -g configurable-http-proxy
+
+#=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
 ynh_script_progression --message="Restoring the app main directory..." --weight=5
 
 ynh_restore_file --origin_path="$install_dir"
 
-chown -R root: $install_dir/
-chown -R $admin: $install_dir/venv/
-
-#=================================================
-# SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
- ynh_script_progression --message="Reinstalling dependencies..." --weight=15
-
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
-$ynh_npm install -g configurable-http-proxy
+chown -R root: "$install_dir"
+chown -R "$admin:" "$install_dir/venv"
 
 #=================================================
 # RESTORE SYSTEMD
@@ -39,16 +36,15 @@ ynh_script_progression --message="Restoring system configurations related to $ap
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
-systemctl enable $app.service --quiet
-
-yunohost service add $app --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
+systemctl enable "$app.service" --quiet
+yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================
-# START SYSTEMD SERVICE
+# RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=5
+ynh_script_progression --message="Reloading NGINX web server and $app's service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 ynh_systemd_action --service_name=nginx --action=reload
 
