@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -10,154 +8,77 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=3
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-port_hub=$(ynh_app_setting_get --app=$app --key=port_hub)
-port_http_proxy=$(ynh_app_setting_get --app=$app --key=port_http_proxy)
-enable_terminal=$(ynh_app_setting_get --app=$app --key=enable_terminal)
-
-#=================================================
-# CHECK VERSION
-#=================================================
-
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=48
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	ynh_clean_check_starting
-	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --weight=2
+ynh_script_progression --message="Stopping $app's systemd service..." --weight=2
 
-ynh_systemd_action --service_name=$app --action="stop"
-
-#=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
-
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/opt/$app
-	mkdir -p $final_path
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_systemd_action --service_name="$app" --action="stop"
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..." --weight=10
 
-ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 
-$ynh_npm install -g configurable-http-proxy npm
+ynh_exec_warn_less "$ynh_npm" install -g configurable-http-proxy
 
 #=================================================
-# SPECIFIC UPGRADE
+# SET ADMIN GROUP
+#=================================================
+ynh_script_progression --message="Adding $admin to $app's group..." --weight=5
+
+usermod -a -G "$app" "$admin"
+
 #=================================================
 # BUILD APP
 #=================================================
+ynh_script_progression --message="Building app..." --weight=15
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Building app..." --weight=160
+ynh_secure_remove --file="$install_dir/.venv"
+python3 -m venv "$install_dir/venv"
 
-	ynh_secure_remove $final_path/.venv
-	python3 -m venv $final_path/venv
-	source $final_path/venv/bin/activate
-
-	pushd $final_path
-		ynh_exec_warn_less pip install jupyterlab==$jupyterlab_version jupyterhub notebook jupyter_collaboration jupyterhub-ldapauthenticator pyzmq
-	popd
-fi
+ynh_exec_warn_less "$install_dir/venv/bin/python3" -m pip install \
+    jupyterlab=="$(jupyterlab_upstream_version)" \
+    jupyterhub \
+    jupyter_collaboration \
+    notebook \
+    jupyterhub-ldapauthenticator \
+    pyzmq \
+    jupyterlab-language-pack-fr-FR
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..."
+ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-mkdir -p "$final_path/config"
+mkdir -p "$install_dir/config"
 
-path=${path_url%/}
+path_no_slash=${path%/}
 
-ynh_add_config --template="../conf/jupyterhub_config.py" --destination="$final_path/config/jupyterhub_config.py"
+ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
-ynh_add_config --template="../conf/jupyter_notebook_config.py" --destination="$final_path/config/jupyter_notebook_config.py"
-
-chown -R root: $final_path/
-chown -R $admin: $final_path/venv/
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Upgrading systemd configuration..."
+ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
+
+ynh_add_nginx_config
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
-yunohost service add $app --description="$app daemon"
+yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression --message="Starting $app's systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
-
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
