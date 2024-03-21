@@ -10,13 +10,12 @@ nodejs_version="18"
 # PERSONAL HELPERS
 #=================================================
 
-upstream_version() {
+jupyterlab_upstream_version() {
     upstream_repository=$(ynh_read_manifest --manifest_key='upstream.code')
     upstream_url=$(ynh_read_manifest --manifest_key='resources.sources.main.url')
     upstream_commit=$(echo "$upstream_url" | sed -e "s|^${upstream_repository}/archive/refs/tags/\(.*\)\.tar\.gz|\1|")
     echo "$upstream_commit"
 }
-jupyterlab_version="$(upstream_version)"
 
 #=================================================
 # EXPERIMENTAL HELPERS
