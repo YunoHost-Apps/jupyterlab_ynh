@@ -53,8 +53,7 @@ path_no_slash=${path%/}
 ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
 ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
-chown -R root: "$install_dir"
-chown -R "$admin:" "$install_dir/venv"
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # SETUP SYSTEMD
