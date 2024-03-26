@@ -7,7 +7,7 @@ name = "JupyterLab"
 description.en = "Code console environment for running Python code interactively"
 description.fr = "Console de code pour exécuter du code Python de manière interactive"
 
-version = "4.1.0~ynh1"
+version = "4.1.2~ynh1"
 
 maintainers = ["kay0u"]
 
@@ -54,8 +54,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.0.tar.gz"
-    sha256 = "2afed4c1cbd7c83d72ad1015a7955bb0f49e82cbe6ba896ee198ecb049b08749"
+    url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.2.tar.gz"
+    sha256 = "7d12cf32de0e8e894a046fdacdd5be825e9239ee9379b5910c81c8abef117d01"
     # Only used for autoupdate, code will checkout the commit
     prefetch = false
 
