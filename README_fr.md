@@ -19,7 +19,7 @@ Il NE doit PAS être modifié à la main.
 JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
 
-**Version incluse :** 4.1.4~ynh1
+**Version incluse :** 4.1.5~ynh1
 
 **Démo :** <https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo>
 
