@@ -5,7 +5,7 @@
 
 # YunoHost 上的 JupyterLab
 
-[![集成程度](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab) ![工作状态](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/jupyterlab.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)
 
 [![使用 YunoHost 安装 JupyterLab](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=jupyterlab)
 
@@ -19,7 +19,7 @@
 JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
 
-**分发版本：** 4.1.5~ynh1
+**分发版本：** 5.0.0~ynh1
 
 **演示：** <https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo>
 
