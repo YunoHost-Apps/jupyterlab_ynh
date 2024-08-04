@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # JupyterLab YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/jupyterlab.svg)](https://dash.yunohost.org/appci/app/jupyterlab) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/jupyterlab.svg)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/jupyterlab.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/jupyterlab.maintain.svg)
 
 [![Instalatu JupyterLab YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=jupyterlab)
 
@@ -19,7 +19,7 @@ EZ editatu eskuz.
 JupyterLab is the next-generation user interface for Project Jupyter offering all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user interface. JupyterLab will eventually replace the classic Jupyter Notebook.
 
 
-**Paketatutako bertsioa:** 4.1.5~ynh1
+**Paketatutako bertsioa:** 4.2.4~ynh1
 
 **Demoa:** <https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo>
 
