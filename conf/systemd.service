@@ -8,7 +8,7 @@ User=root
 WorkingDirectory=__INSTALL_DIR__/
 Environment="LC_ALL=C.UTF-8"
 Environment="LANG=C.UTF-8"
-Environment="__YNH_NODE_LOAD_PATH__:__INSTALL_DIR__/venv/bin"
+Environment="PATH=__PATH_WITH_NODEJS__:__INSTALL_DIR__/venv/bin"
 ExecStart=__INSTALL_DIR__/venv/bin/jupyterhub -f __INSTALL_DIR__/config/jupyterhub_config.py --upgrade-db
 Restart=always
 RestartSec=10
