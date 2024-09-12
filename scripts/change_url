@@ -35,7 +35,6 @@ ynh_config_add --template="jupyterhub_config.py" --destination="$install_dir/con
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
 ynh_systemctl --service="$app" --action="start" --wait_until="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
