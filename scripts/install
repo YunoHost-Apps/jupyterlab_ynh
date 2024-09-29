@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -58,11 +54,10 @@ chown -R "$app:$app" "$install_dir"
 #=================================================
 ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
-# Create a dedicated NGINX config
 ynh_add_nginx_config
 
-# Create a dedicated systemd config
 ynh_add_systemd_config
+
 yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================
@@ -70,7 +65,6 @@ yunohost service add "$app" --description="Console environment for running Pytho
 #=================================================
 ynh_script_progression --message="Starting $app's systemd service..." --weight=3
 
-# Start a systemd service
 ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================

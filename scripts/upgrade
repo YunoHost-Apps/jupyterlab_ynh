@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -69,8 +65,8 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
 ynh_add_nginx_config
 
-# Create a dedicated systemd config
 ynh_add_systemd_config
+
 yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================

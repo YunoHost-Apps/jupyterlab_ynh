@@ -16,11 +16,3 @@ jupyterlab_upstream_version() {
     upstream_commit=$(echo "$upstream_url" | sed -e "s|^${upstream_repository}/archive/refs/tags/\(.*\)\.tar\.gz|\1|")
     echo "$upstream_commit"
 }
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
