@@ -37,7 +37,7 @@ JupyterLab is the next-generation user interface for Project Jupyter offering al
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/jupyterlab_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
