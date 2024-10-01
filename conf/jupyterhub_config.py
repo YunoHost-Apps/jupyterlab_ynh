@@ -1000,3 +1000,4 @@ c.Authenticator.admin_users = ["__ADMIN__"]
 
 c.LDAPAuthenticator.bind_dn_template = [ "uid={username},ou=users,dc=yunohost,dc=org" ]
 c.LDAPAuthenticator.server_address = 'localhost'
+c.Authenticator.allow_all = True
