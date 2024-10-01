@@ -54,13 +54,13 @@ ram.runtime = "50M"
     default = true
 
 [resources]
-    [resources.sources.main]
-    url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.5.tar.gz"
-    sha256 = "750511c4956e2926625b1c9a6cc0e6e82e090a8b682e631c8117b2e104f94723"
+    #[resources.sources.main]
+    #url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.5.tar.gz"
+    #sha256 = "750511c4956e2926625b1c9a6cc0e6e82e090a8b682e631c8117b2e104f94723"
     # Only used for autoupdate, code will checkout the commit
-    prefetch = false
+    #prefetch = false
 
-    autoupdate.strategy = "latest_github_tag"
+    #autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
