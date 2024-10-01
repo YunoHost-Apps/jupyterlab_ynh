@@ -27,7 +27,7 @@ ynh_script_progression "Building app..."
 python3 -m venv "$install_dir/venv"
 
 ynh_hide_warnings "$install_dir/venv/bin/python3" -m pip install \
-    jupyterlab=="$(jupyterlab_upstream_version)" \
+    jupyterlab=="$(ynh_app_upstream_version)" \
     jupyterhub \
     jupyter_collaboration \
     notebook \
