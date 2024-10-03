@@ -4,10 +4,11 @@ packaging_format = 2
 
 id = "jupyterlab"
 name = "JupyterLab"
-description.en = "Code console environment for running Python code interactively"
-description.fr = "Console de code pour exécuter du code Python de manière interactive"
+description.en = "Interactive development environment for notebooks"
+description.fr = "Environnement de développement interactif pour notebooks"
 
-version = "4.2.4~ynh1"
+#https://pypi.org/project/jupyterlab/
+version = "4.2.5~ynh1"
 
 maintainers = ["kay0u"]
 
@@ -19,7 +20,7 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.30"
 architectures = "all"
 multi_instance = false
 
@@ -53,13 +54,13 @@ ram.runtime = "50M"
     default = true
 
 [resources]
-    [resources.sources.main]
-    url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.5.tar.gz"
-    sha256 = "750511c4956e2926625b1c9a6cc0e6e82e090a8b682e631c8117b2e104f94723"
+    #[resources.sources.main]
+    #url = "https://github.com/jupyterhub/jupyterhub/archive/refs/tags/4.1.5.tar.gz"
+    #sha256 = "750511c4956e2926625b1c9a6cc0e6e82e090a8b682e631c8117b2e104f94723"
     # Only used for autoupdate, code will checkout the commit
-    prefetch = false
+    #prefetch = false
 
-    autoupdate.strategy = "latest_github_tag"
+    #autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
