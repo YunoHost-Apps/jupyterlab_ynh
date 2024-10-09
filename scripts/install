@@ -6,28 +6,27 @@ source /usr/share/yunohost/helpers
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS..." --weight=15
+ynh_script_progression "Installing NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
+ynh_nodejs_install
 
-ynh_exec_warn_less "$ynh_npm" install -g configurable-http-proxy
+ynh_hide_warnings npm install -g configurable-http-proxy
 
 #=================================================
 # SET ADMIN GROUP
 #=================================================
-ynh_script_progression --message="Adding $admin to $app's group..." --weight=5
+ynh_script_progression "Adding $admin to $app's group..."
 
 usermod -a -G "$app" "$admin"
 
 #=================================================
 # BUILD APP
 #=================================================
-ynh_script_progression --message="Building app..." --weight=5
+ynh_script_progression "Building app..."
 
 python3 -m venv "$install_dir/venv"
 
-ynh_exec_warn_less "$install_dir/venv/bin/python3" -m pip install \
+ynh_hide_warnings "$install_dir/venv/bin/python3" -m pip install \
     jupyterlab=="$(ynh_app_upstream_version)" \
     jupyterhub \
     jupyter_collaboration \
@@ -39,36 +38,34 @@ ynh_exec_warn_less "$install_dir/venv/bin/python3" -m pip install \
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding $app's configuration file..." --weight=1
+ynh_script_progression "Adding $app's configuration file..."
 
 mkdir -p "$install_dir/config"
 
 path_no_slash=${path%/}
-ynh_add_config --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
-ynh_add_config --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
-
-chown -R "$app:$app" "$install_dir"
+ynh_config_add --template="jupyterhub_config.py" --destination="$install_dir/config/jupyterhub_config.py"
+ynh_config_add --template="jupyter_notebook_config.py" --destination="$install_dir/config/jupyter_notebook_config.py"
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
-ynh_add_nginx_config
+ynh_config_add_nginx
 
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting $app's systemd service..." --weight=3
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start" --wait_until="JupyterHub is now running at" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"

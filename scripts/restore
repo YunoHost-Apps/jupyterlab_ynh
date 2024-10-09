@@ -6,37 +6,34 @@ source /usr/share/yunohost/helpers
 #=================================================
 # REINSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Reinstalling NodeJS..." --weight=15
+ynh_script_progression "Reinstalling NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
-ynh_use_nodejs
+ynh_nodejs_install
 
-ynh_exec_warn_less "$ynh_npm" install -g configurable-http-proxy
+ynh_hide_warnings npm install -g configurable-http-proxy
 
 #=================================================
 # SET ADMIN GROUP
 #=================================================
-ynh_script_progression --message="Adding $admin to $app's group..." --weight=5
+ynh_script_progression "Adding $admin to $app's group..."
 
 usermod -a -G "$app" "$admin"
 
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Restoring the app main directory..." --weight=5
+ynh_script_progression "Restoring the app main directory..."
 
-ynh_restore_file --origin_path="$install_dir"
-
-chown -R "$app:$app" "$install_dir"
+ynh_restore "$install_dir"
 
 #=================================================
 # RESTORE SYSTEMD
 #=================================================
-ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
+ynh_script_progression "Restoring system configurations related to $app..."
 
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+ynh_restore "/etc/systemd/system/$app.service"
 systemctl enable "$app.service" --quiet
 
 yunohost service add "$app" --description="Console environment for running Python code" --log="/var/log/$app/$app.log"
@@ -44,14 +41,14 @@ yunohost service add "$app" --description="Console environment for running Pytho
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server and $app's service..." --weight=1
+ynh_script_progression "Reloading NGINX web server and $app's service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --line_match="JupyterHub is now running at" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start" --wait_until="JupyterHub is now running at" --log_path="systemd"
 
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemctl --service=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app" --last
+ynh_script_progression "Restoration completed for $app"
