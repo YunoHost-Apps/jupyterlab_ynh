@@ -1,0 +1,14 @@
+#!/bin/bash
+
+app="${0//.\/50-}"
+app_trigger=$1
+removed_users=$2
+#permission=$3
+#removed_groups=$4
+
+if [[ "$app_trigger" = "$app" ]];
+then
+  for user in ${removed_users//,/ };do
+    deluser "$user" "$app"
+  done
+fi
