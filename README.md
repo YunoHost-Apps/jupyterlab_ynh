@@ -4,7 +4,7 @@ It shall NOT be edited by hand.
 -->
 
 <h1>
-  <img src="https://raw.githubusercontent.com/YunoHost/apps/master/logos/jupyterlab.png" width="32px" alt="Logo of JupyterLab">
+  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/jupyterlab.png" width="32px" alt="Logo of JupyterLab">
   JupyterLab, packaged for YunoHost
 </h1>
 
@@ -12,12 +12,16 @@ Interactive development environment for notebooks
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://jupyter.org)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://mybinder.org/v2/gh/jupyterlab/jupyterlab-demo/master?urlpath=lab/tree/demo)
-![Version: 4.2.5~ynh2](https://img.shields.io/badge/Version-4.2.5~ynh2-rgba(0,150,0,1)?style=for-the-badge)
+[![Version: 5.4.0~ynh1](https://img.shields.io/badge/Version-5.4.0~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/jupyterlab/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/jupyterlab"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
 <a href="https://github.com/YunoHost-Apps/jupyterlab_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
 </div>
+
+
+## Screenshots
+![Screenshot of JupyterLab](./doc/screenshots/jupyterlab.png)
 
 ## 📦 Developer info
 
