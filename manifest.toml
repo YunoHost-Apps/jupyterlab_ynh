@@ -8,7 +8,7 @@ description.en = "Interactive development environment for notebooks"
 description.fr = "Environnement de développement interactif pour notebooks"
 
 #https://pypi.org/project/jupyterlab/
-version = "4.4.5~ynh1"
+version = "4.5.0~ynh1"
 
 maintainers = []
 
