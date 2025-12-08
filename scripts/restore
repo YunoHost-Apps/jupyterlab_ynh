@@ -13,8 +13,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Reinstalling NodeJS..."
 
-ynh_nodejs_install
-
 ynh_hide_warnings npm install -g configurable-http-proxy
 
 #=================================================

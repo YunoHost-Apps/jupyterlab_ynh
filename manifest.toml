@@ -20,7 +20,11 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
+<<<<<<< Updated upstream
 yunohost = ">= 12.0.9"
+=======
+yunohost = ">= 12.1.17"
+>>>>>>> Stashed changes
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -77,9 +81,8 @@ ram.runtime = "50M"
     http_proxy.default = 8082
 
     [resources.apt]
-    packages = "python3-dev, python3-pip, python3-venv, pipenv"
+    packages = "python3-dev, python3-pip, python3-venv, pipenv, yarn"
 
-    [resources.apt.extras.yarn]
-    repo = "deb https://dl.yarnpkg.com/debian/ stable main"
-    key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
-    packages = ["yarn"]
+    [resources.nodejs]
+    version = "20.1"
+    
