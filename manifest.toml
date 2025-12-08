@@ -20,11 +20,7 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-<<<<<<< Updated upstream
-yunohost = ">= 12.0.9"
-=======
 yunohost = ">= 12.1.17"
->>>>>>> Stashed changes
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
