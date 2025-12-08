@@ -7,13 +7,6 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing NodeJS..."
-
-ynh_hide_warnings npm install -g configurable-http-proxy
-
-#=================================================
 # SET ADMIN GROUP
 #=================================================
 ynh_script_progression "Adding $admin to $app's group..."
@@ -27,6 +20,7 @@ ynh_script_progression "Building app..."
 
 python3 -m venv "$install_dir/venv"
 
+ynh_hide_warnings npm install -g configurable-http-proxy
 ynh_hide_warnings "$install_dir/venv/bin/python3" -m pip install \
     jupyterlab=="$(ynh_app_upstream_version)" \
     jupyterhub \
