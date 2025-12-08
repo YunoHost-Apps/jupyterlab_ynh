@@ -1,0 +1,14 @@
+#!/bin/bash
+
+app="${0//.\/50-}"
+app_trigger=$1
+new_users=$2
+#permission=$3
+#new_groups=$4
+
+if [[ "$app_trigger" = "$app" ]];
+then
+  for user in ${new_users//,/ };do
+    usermod -a -G "$app" "$user"
+  done
+fi

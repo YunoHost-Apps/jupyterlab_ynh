@@ -8,7 +8,7 @@ description.en = "Interactive development environment for notebooks"
 description.fr = "Environnement de développement interactif pour notebooks"
 
 #https://pypi.org/project/jupyterlab/
-version = "4.2.5~ynh2"
+version = "4.5.0~ynh1"
 
 maintainers = []
 
@@ -20,13 +20,12 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 11.2.30"
+yunohost = ">= 12.1.17"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 
 ldap = true
-
 sso = false
 
 disk = "50M"
@@ -56,12 +55,12 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/jupyterlab/jupyterlab/archive/refs/tags/v4.2.5.tar.gz"
-    sha256 = "2a67111b23a05aa8ff44a0f1663c983980471d24910157a0abbee06e808f4eb0"
+    url = "https://github.com/jupyterlab/jupyterlab/archive/refs/tags/v4.4.5.tar.gz"
+    sha256 = "c8b1c75507881de31beae13328b7798d9f4e3e0337eabed8a7ad32c7e9fd2e47"
     # Only used for autoupdate, code will checkout the commit
     prefetch = false
 
-    autoupdate.strategy = "latest_github_release"
+    autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
@@ -78,9 +77,8 @@ ram.runtime = "50M"
     http_proxy.default = 8082
 
     [resources.apt]
-    packages = "python3-dev, python3-pip, python3-venv, pipenv"
+    packages = "python3-dev, python3-pip, python3-venv, pipenv, yarn"
 
-    [resources.apt.extras.yarn]
-    repo = "deb https://dl.yarnpkg.com/debian/ stable main"
-    key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
-    packages = ["yarn"]
+    [resources.nodejs]
+    version = "22"
+    

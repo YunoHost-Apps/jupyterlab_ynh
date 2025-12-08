@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -18,8 +17,6 @@ ynh_systemctl --service="$app" --action="stop"
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression "Upgrading dependencies..."
-
-ynh_nodejs_install
 
 ynh_hide_warnings npm install -g configurable-http-proxy
 
@@ -74,7 +71,7 @@ yunohost service add "$app" --description="Console environment for running Pytho
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start" --wait_until="JupyterHub is now running at" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT
