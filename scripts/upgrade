@@ -36,13 +36,8 @@ ynh_safe_rm "$install_dir/.venv"
 python3 -m venv "$install_dir/venv"
 
 ynh_hide_warnings "$install_dir/venv/bin/python3" -m pip install \
-    jupyterlab=="$(ynh_app_upstream_version)" \
-    jupyterhub \
-    jupyter_collaboration \
-    notebook \
-    jupyterhub-ldapauthenticator \
-    pyzmq \
-    jupyterlab-language-pack-fr-FR
+    jupyterlab=="$(ynh_app_upstream_version)" jupyterhub jupyter_collaboration notebook \
+    jupyterhub-ldapauthenticator pyzmq jupyterlab-language-pack-fr-FR
 
 #=================================================
 # UPDATE A CONFIG FILE
