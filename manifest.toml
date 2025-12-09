@@ -60,7 +60,7 @@ ram.runtime = "50M"
     # Only used for autoupdate, code will checkout the commit
     prefetch = false
 
-    autoupdate.strategy = "latest_github_tag"
+    #autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
