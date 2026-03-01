@@ -8,7 +8,7 @@ description.en = "Interactive development environment for notebooks"
 description.fr = "Environnement de développement interactif pour notebooks"
 
 #https://pypi.org/project/jupyterlab/
-version = "4.5.0~ynh1"
+version = "4.5.5~ynh1"
 
 maintainers = []
 
@@ -20,7 +20,7 @@ admindoc = "https://jupyterlab.readthedocs.io/en/stable/"
 code = "https://github.com/jupyterhub/jupyterhub"
 
 [integration]
-yunohost = ">= 12.1.17"
+yunohost = ">= 12.1.39"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -55,8 +55,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/jupyterlab/jupyterlab/archive/refs/tags/v4.4.5.tar.gz"
-    sha256 = "c8b1c75507881de31beae13328b7798d9f4e3e0337eabed8a7ad32c7e9fd2e47"
+    url = "https://github.com/jupyterlab/jupyterlab/archive/refs/tags/v4.5.5.tar.gz"
+    sha256 = "e30f5c0803197a39d5360b3588111829591b1550747fb9e05367bc1d9aa85226"
     # Only used for autoupdate, code will checkout the commit
     prefetch = false
 
